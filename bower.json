@@ -1,0 +1,22 @@
+{
+  "name": "eboss-js",
+  "version": "0.0.1",
+  "description": "Javascript Plugins for Eboss",
+  "homepage": "https://github.com/seomaster/eboss-js",
+  "authors": [
+    {
+      "name": "SEO Master",
+      "email": ""
+    }
+  ],
+  "main": "./dist/eboss-js.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seomaster/eboss-js.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "owl-carousel2": "~2.0.0-beta.3"
+  }
+}
