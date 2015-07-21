@@ -1,5 +1,4 @@
 module.exports = (grunt) ->
-
   #    Project configuration.
   grunt.initConfig
 
@@ -8,18 +7,25 @@ module.exports = (grunt) ->
     karma:
       unit:
         configFile: 'spec/karma.config.coffee'
+      build:
+        singleRun: true
+        browsers: ['PhantomJS']
+
+    clean:
+      dist: [ 'dist/**/*.js']
 
     coffee:
       compile:
         files:
           "dist/eboss-js.js": [
-            "src/coffee/**/*.coffee",
-            "src/coffee/*.coffee"
+            "src/coffee/helpers/*.coffee",
+            "src/coffee/controllers/*.coffee",
+            "src/coffee/handlers/*.coffee",
+            "src/coffee/*.coffee",
           ]
 
     coffeelint:
       src: ['src/**/*.coffee']
-      spec: [ 'spec/**/*.coffee']
 
     uglify:
       my_target:
@@ -46,7 +52,6 @@ module.exports = (grunt) ->
         files: ['dist/**/*.js']
         task:  ['uglify']
   
-
   #    Load the plugin
   grunt.loadNpmTasks 'grunt-karma'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -55,24 +60,17 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-shell'
   grunt.loadNpmTasks 'grunt-bump'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-contrib-clean'
 
   #   Default task
   grunt.registerTask( 'default', ['coffeelint','coffee' ])
-  grunt.registerTask( 'patch', [
-    'coffeelint',
-    'coffee',
-    'uglify',
-    'shell:git_add',
-    'bump:patch'])
   grunt.registerTask( 'minor', [
     'coffeelint',
     'coffee',
     'uglify',
-    'shell:git_add',
     'bump:minor'])
   grunt.registerTask( 'major', [
     'coffeelint',
     'coffee',
     'uglify',
-    'shell:git_add',
     'bump:major'])

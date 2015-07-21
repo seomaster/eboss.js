@@ -9,16 +9,18 @@ module.exports = (config) ->
 
   # frameworks to use
   # available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['bower', 'fixture', 'jasmine-jquery','jasmine']
+    frameworks: ['bower', 'fixture', 'jasmine-jquery','jasmine', 'sinon' ]
 
-    bowerPackages: ['jquery', 'jasmine-ajax', 'owl-carousel2']
+    bowerPackages: ['jquery', 'jasmine-ajax', 'jasmine-jquery']
 
 
   # list of files / patterns to load in the browser
     files: [
-
-    # Load al the libraries your build needs while testing
+    # Load all the libraries your build needs while testing
       {pattern: 'lib/**/*.js', included: false},
+
+    # load all shims your build needs while testing
+      {pattern: 'shims/**/*.js', included: false},
 
     # serve html fixtures
       { pattern: 'spec/fixtures/**/*.html' },
@@ -29,7 +31,7 @@ module.exports = (config) ->
 
     # Load all the karma tests
       {pattern: 'spec/coffee/**/*.coffee', included: true},
-      {pattern: 'spec/coffee/*.test.coffee', included: true}
+      {pattern: 'spec/coffee/*.spec.coffee', included: true}
     ]
 
 

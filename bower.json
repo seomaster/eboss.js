@@ -17,6 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "jquery": "~2.1.4",
-    "owl-carousel2": "~2.0.0-beta.3"
+    "owl-carousel2": "~2.0.0-beta.3",
+    "jasmine-ajax": "~3.2.0",
+    "jasmine-jquery": "~2.1.0"
   }
 }
