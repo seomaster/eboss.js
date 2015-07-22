@@ -52,21 +52,25 @@ class @SelectVariationHelper
       .addClass('unavailable')
       .attr('title', 'Indisponível')
 
-  @updateImageCarousel: (variations) ->
-    if variations.length == 1
-      variation = variations[0]
-      images = variation.variation_images
-      $('div#image-big').hide().empty()
-      $('div#thumb-nav').hide().empty()
-      huges = []
-      thumbs = []
-      for image in images
-        huges.push($('div#huge-placeholder')
-          .find("div[data-huge='variation_#{image}']").clone())
-        thumbs.push($('div#thumb-placeholder')
-          .find("div[data-thumb='variation_#{image}']").clone())
+  @carouselIsDefined: ->
+    $("div#image-big").length != 0 and $('div#thumb-nav').length != 0
 
-      $("div#image-big").append(huges)
-      $("div#thumb-nav").append(thumbs)
-      $('.slide-full').data('owlCarousel').reinit()
-      $('.slide-thumb').data('owlCarousel').reinit()
+  @updateImageCarousel: (variations) ->
+    if @carouselIsDefined()
+      if variations.length == 1
+        variation = variations[0]
+        images = variation.variation_images
+        $('div#image-big').hide().empty()
+        $('div#thumb-nav').hide().empty()
+        huges = []
+        thumbs = []
+        for image in images
+          huges.push($('div#huge-placeholder')
+            .find("div[data-huge='variation_#{image}']").clone())
+          thumbs.push($('div#thumb-placeholder')
+            .find("div[data-thumb='variation_#{image}']").clone())
+
+        $("div#image-big").append(huges)
+        $("div#thumb-nav").append(thumbs)
+        $('.slide-full').data('owlCarousel').reinit()
+        $('.slide-thumb').data('owlCarousel').reinit()
