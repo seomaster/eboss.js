@@ -43,13 +43,12 @@ class @SelectVariationHelper
   @enableAllOptionButtons: ->
     radio_buttons = $("input[data-role='variation']:not([disabled=true])")
     radio_buttons.attr 'disabled', false
-    li = radio_buttons.parent().parent()
-    li.removeClass('unavailable').removeAttr 'title'
+    radio_buttons.closest('li')
+      .removeClass('unavailable').removeAttr('title')
   
   @disableVariationButton: (button) ->
     $(button).attr('disabled', true).prop 'checked', false
-    li = $(button).parent().parent()
-    $(li).removeClass('active')
+    $(button).closest('li').removeClass('active')
       .addClass('unavailable')
       .attr('title', 'Indisponível')
 
