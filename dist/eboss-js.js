@@ -260,6 +260,47 @@
   return inflector;
 });
 ;(function() {
+  this.CartTemplates = (function() {
+    function CartTemplates() {}
+
+    CartTemplates.selectedVariation = function(variation) {
+      var i, key, len, ref, template;
+      template = "<div id='selected_variation' class='modal fade'>" + "<div class='modal-header'><a class='close' data-dismiss='modal'>x</a>" + "<h3>Item adicionado ao carrinho de compras!</h3>" + "</div>" + "<div class='modal-body'>" + ("<p><img src='" + variation.thumb_url + "'></p>") + ("<p>" + variation.product_name + "</p>") + ("<p>" + variation.regular_price_formatted + "</p>");
+      ref = variation.options_values;
+      for (i = 0, len = ref.length; i < len; i++) {
+        key = ref[i];
+        template = template + ("<p>" + key + "</p>");
+      }
+      template = template + "</div></div>";
+      return template;
+    };
+
+    CartTemplates.cartItems = function(line_items) {
+      var i, item, j, key, len, len1, ref, template, variation, variation_tmp;
+      template = "<div id='selected_variation' class='modal fade'>" + "<div class='modal-header'><a class='close' data-dismiss='modal'>x</a>" + "<h3>Item adicionado ao carrinho de compras!</h3>" + "</div><div class='modal-body'>";
+      variation_tmp = '';
+      for (i = 0, len = line_items.length; i < len; i++) {
+        item = line_items[i];
+        variation = item.variation;
+        variation_tmp = variation_tmp + ("<div><p><img src='" + variation.thumb_url + "'></p>") + ("<p>" + variation.product_name + "</p>") + ("<p>Quantidade: " + item.qty + "</p>") + ("<p>" + variation.regular_price_formatted + "</p>");
+        ref = variation.options_values;
+        for (j = 0, len1 = ref.length; j < len1; j++) {
+          key = ref[j];
+          variation_tmp = variation_tmp + ("<p>" + key + "</p>");
+        }
+        variation_tmp = variation_tmp + "</div>";
+      }
+      template = template + variation_tmp + "</div></div>";
+      return template;
+    };
+
+    return CartTemplates;
+
+  })();
+
+}).call(this);
+
+(function() {
   this.CartHelper = (function() {
     function CartHelper() {}
 
@@ -268,7 +309,7 @@
       _.plural('item', 'itens');
       numberOfItems = /\d+/.exec($("p[data-role='cart-counter']").text());
       numberOfItems = parseInt(numberOfItems) + 1;
-      return $("p.items a").text("" + (_('item').pluralize(numberOfItems, true)));
+      return $("p[data-role='cart-counter'] a").text("" + (_('item').pluralize(numberOfItems, true)));
     };
 
     CartHelper.updateCounterItems = function(numberOfItems) {
@@ -469,7 +510,7 @@
         if (variation.qty_in_stock === 0 && variation.options_values.length === 1) {
           opt = variation.options_values[0];
           results.push(SelectVariationHelper.disableVariationButton($("input[type='radio'][value='" + opt + "']")));
-        } else if (variation.options_values.length > 1) {
+        } else if (variation.qty_in_stock === 0 && variation.options_values.length > 1) {
           results.push((function() {
             var j, len1, ref, results1;
             ref = variation.options_values;
@@ -593,6 +634,7 @@
   this.Eboss = (function() {
     function Eboss() {
       new SelectVariationHandler();
+      new CartHandler();
     }
 
     return Eboss;

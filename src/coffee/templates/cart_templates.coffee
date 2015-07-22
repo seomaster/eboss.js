@@ -12,13 +12,13 @@ class @CartTemplates
     template = template + "</div></div>"
     template
 
-  @cartItems: (cart) ->
+  @cartItems: (line_items) ->
     template = "<div id='selected_variation' class='modal fade'>"+
       "<div class='modal-header'><a class='close' data-dismiss='modal'>x</a>"+
         "<h3>Item adicionado ao carrinho de compras!</h3>"+
       "</div><div class='modal-body'>"
     variation_tmp = ''
-    for item in cart.line_items
+    for item in line_items
       variation = item.variation
       variation_tmp = variation_tmp +
       "<div><p><img src='#{variation.thumb_url}'></p>"+"

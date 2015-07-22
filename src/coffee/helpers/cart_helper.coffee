@@ -3,7 +3,7 @@ class @CartHelper
     _.plural('item', 'itens')
     numberOfItems = /\d+/.exec $("p[data-role='cart-counter']").text()
     numberOfItems = parseInt(numberOfItems) + 1
-    $("p.items a")
+    $("p[data-role='cart-counter'] a")
       .text("#{_('item').pluralize(numberOfItems, true)}")
 
   @updateCounterItems: (numberOfItems) ->

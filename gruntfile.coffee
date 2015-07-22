@@ -15,6 +15,7 @@ module.exports = (grunt) ->
       compile:
         files:
           "dist/eboss-js.js": [
+            "src/coffee/templates/*.coffee",
             "src/coffee/helpers/*.coffee",
             "src/coffee/controllers/*.coffee",
             "src/coffee/handlers/*.coffee",
@@ -89,7 +90,6 @@ module.exports = (grunt) ->
   grunt.registerTask( 'default', ['coffeelint','coffee' ])
   grunt.registerTask('buildbower', ['bower_concat', 'uglify:bower'])
   grunt.registerTask( 'minor', [
-    'coffeelint',
     'coffee',
     'buildbower',
     'concat',
