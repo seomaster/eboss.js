@@ -46,7 +46,7 @@ class @SelectVariationHelper
     radio_buttons.closest('li')
       .removeClass('unavailable').removeAttr('title')
   
-  @disableVariationButton: (button) ->
+  @disableOptionButton: (button) ->
     $(button).attr('disabled', true).prop 'checked', false
     $(button).closest('li').removeClass('active')
       .addClass('unavailable')
