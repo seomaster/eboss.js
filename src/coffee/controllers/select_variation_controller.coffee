@@ -34,12 +34,12 @@ class @SelectVariationController
       if variation.qty_in_stock == 0 and variation.options_values.length == 1
         opt = variation.options_values[0]
         SelectVariationHelper
-          .disableVariationButton($("input[type='radio'][value='#{opt}']"))
+          .disableOptionButton($("input[type='radio'][value='#{opt}']"))
       else if variation.qty_in_stock == 0 and variation.options_values.length > 1
         for opt in variation.options_values
           if opt != $(button).attr('value')
             SelectVariationHelper
-            .disableVariationButton($("input[type='radio'][value='#{opt}']"))
+            .disableOptionButton($("input[type='radio'][value='#{opt}']"))
 
   updateSelectedVariation: (variations) ->
     if variations.length == 1

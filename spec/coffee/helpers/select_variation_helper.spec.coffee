@@ -3,7 +3,7 @@ describe 'SelectVariationHelper', ->
   it 'to be defined', ->
     expect( SelectVariationHelper ).toBeDefined()
 
-  describe 'update_price', ->
+  describe 'updatePrice', ->
     beforeEach ->
       fixture.load('helpers/update_price.html')
 
@@ -18,7 +18,7 @@ describe 'SelectVariationHelper', ->
       SelectVariationHelper.updatePrice('#price', 500)
       expect($("#price").text()).toBe '500'
   
-   describe 'add_parameter_to_url', ->
+   describe 'addParameterToURL', ->
     beforeEach ->
       @url = document.URL
     afterEach ->
@@ -28,7 +28,7 @@ describe 'SelectVariationHelper', ->
       SelectVariationHelper.addParameterToURL('Color', 'Green')
       expect(window.location.toString()).toEqual 'http://localhost:9876/context.html?Color=Green'
 
-   describe 'get_url_parameters', ->
+   describe 'getURLParameters', ->
     beforeEach ->
         @url = document.URL
       afterEach ->
@@ -67,7 +67,7 @@ describe 'SelectVariationHelper', ->
       expect(spy).toHaveBeenCalledWith('owlCarousel')
       expect(spy.calls.count()).toBe 2
 
-  describe 'enable_all_option_buttons', ->
+  describe 'enableAllOptionButtons', ->
     beforeEach ->
       fixture.load('controllers/enable_all_options_buttons.html')
 
@@ -84,7 +84,7 @@ describe 'SelectVariationHelper', ->
         expect(li).not.toHaveAttr('title')
         expect(li).not.toHaveClass('unavailable')
 
-  describe 'disable_variation_button', ->
+  describe 'disableOptionButton', ->
     beforeEach ->
       fixture.load('controllers/disable_variation_button.html')
     afterEach ->
@@ -92,7 +92,7 @@ describe 'SelectVariationHelper', ->
 
     it 'disable button for variation with quantity zero in stock', ->
       button = $("input[type='radio'][value='Green']")
-      SelectVariationHelper.disableVariationButton(button)
+      SelectVariationHelper.disableOptionButton(button)
       expect($(button).attr('disabled')).toBe 'disabled'
       li = $(button).parent().parent()
       expect(li).toHaveClass('unavailable')

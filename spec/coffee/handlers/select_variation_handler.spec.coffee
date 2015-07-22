@@ -2,7 +2,7 @@ describe 'SelectVariationHandler', ->
   it 'to be undefined', ->
     expect(SelectVariationHandler).toBeDefined
 
-  describe 'on document ready', ->
+  describe 'onDocumentReady', ->
     beforeEach ->
       @original_url = document.URL
       fixture.load('handlers/select_variations.html', true)
@@ -14,7 +14,7 @@ describe 'SelectVariationHandler', ->
     it 'select options from querystring parameters to select options',  ->
       pending 'Not implemented yet.'
   
-  describe 'on click variation', ->
+  describe 'onClickVariation', ->
     beforeEach ->
       fixture.load('handlers/on_click_variation.html', true)
       variations = [

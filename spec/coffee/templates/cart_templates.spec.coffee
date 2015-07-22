@@ -51,7 +51,7 @@ describe 'CartTemplates', ->
             "variation_images":[2]}
         ]
 
-      rendered = CartTemplates.cartItems(cart)
+      rendered = CartTemplates.cartItems(cart.line_items)
 
       expect(rendered).toContain "class='modal fade'"
       expect(rendered).toContain cart.line_items[0].variation.product_name
