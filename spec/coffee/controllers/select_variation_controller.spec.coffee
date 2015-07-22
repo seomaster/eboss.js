@@ -123,3 +123,36 @@ describe 'SelectVariationController', ->
       expect(sizeButton.parent().parent()).not.toHaveClass('active')
       expect(sizeButton.parent().parent()).toHaveClass('unavailable')
       expect(sizeButton.parent().parent().attr('title')).toBe 'Indisponível'
+
+  describe 'updateSelectedVariation', ->
+    beforeEach ->
+      fixture.load 'controllers/update_selected_variation.html', true
+    afterEach ->
+      fixture.cleanup()
+
+    it 'update id for varition selected', ->
+      variations = [
+        "id": 666
+        "product_name": "T-Shirt (Color: Green)"
+      ]
+      expect($("input[name='variation_selected']").val()).toBe ''
+
+      @controller.updateSelectedVariation(variations)
+      expect($("input[name='variation_selected']").val()).toBe '666'
+
+  describe 'toggleBuyButton', ->
+    beforeEach ->
+      fixture.load 'controllers/update_selected_variation.html', true
+    afterEach ->
+      fixture.cleanup()
+    it 'toggle buy button when select variation according quantity in stock',->
+      variations =[
+        "id": 555
+        "product_name": "T-Shirt (Color: Green)"
+        "qty_in_stock": 0
+      ]
+      expect($("#buy-button").text()).toBe 'comprar'
+      expect($("#buy-button").attr('disabled')).toBeFalsy()
+      @controller.toggleBuyButton(variations)
+      expect($("#buy-button").text()).toBe 'indisponível'
+      expect($("#buy-button").attr('disabled')).toBeTruthy()

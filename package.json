@@ -1,6 +1,6 @@
 {
   "name": "eboss-js",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Javascript Plugins for Eboss",
   "keywords": [
     "CoffeeScript",
@@ -30,10 +30,12 @@
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.10.1",
     "grunt": "^0.4.5",
+    "grunt-bower-concat": "^0.5.0",
     "grunt-bump": "^0.3.0",
     "grunt-coffeelint": "0.0.13",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-coffee": "^0.13.0",
+    "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-uglify": "^0.8.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "^0.10.1",

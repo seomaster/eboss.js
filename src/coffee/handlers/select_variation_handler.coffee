@@ -20,6 +20,8 @@ class @SelectVariationHandler
           @controller.updateRegularPrice(response)
           @controller.updateImageCarousel(response)
           @controller.toogleVariationButtons(event.target, response)
+          @controller.updateSelectedVariation(response)
+          @controller.toggleBuyButton(response)
           @controller.updateHistoryState($(this))
       $.ajax request
 

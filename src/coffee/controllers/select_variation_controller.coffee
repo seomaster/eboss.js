@@ -40,3 +40,13 @@ class @SelectVariationController
           if opt != $(button).attr('value')
             SelectVariationHelper
             .disableVariationButton($("input[type='radio'][value='#{opt}']"))
+
+  updateSelectedVariation: (variations) ->
+    if variations.length == 1
+      $("input[type='hidden'][name='variation_selected']").val(variations[0].id)
+
+  toggleBuyButton: (variations)->
+    if variations.length == 1 and variations[0].qty_in_stock == 0
+      $("#buy-button").text('indisponível').attr('disabled', true)
+    else
+      $("#buy-button").text('comprar').attr('disabled', false)

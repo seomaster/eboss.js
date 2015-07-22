@@ -1,5 +1,5 @@
 module.exports = (grunt) ->
-  #    Project configuration.
+  # Project configuration.
   grunt.initConfig
 
     pkg: grunt.file.readJSON('package.json')
@@ -28,6 +28,9 @@ module.exports = (grunt) ->
       my_target:
         files:
           "dist/eboss-js.min.js": ["dist/eboss-js.js"]
+      bower:
+        files: 
+          'dist/_bower.min.js': 'dist/_bower.js'
 
     bump:
       options:
@@ -48,7 +51,28 @@ module.exports = (grunt) ->
       uglify:
         files: ['dist/**/*.js']
         task:  ['uglify']
-  
+
+    concat:
+      options: 
+        separator: ';'
+      dist:
+        src: ['dist/_bower.js', 'dist/eboss-js.js']
+        dest: 'dist/eboss-js.js'
+      
+    bower_concat: 
+      all: 
+        dest: 'dist/_bower.js',
+        include: [ 'underscore', 'underscore.inflection']
+        mainFiles: 
+          'underscore': ['underscore-min.js', 'underscore-min.map']
+        exclude: [
+          'jquery',
+          'bootstrap',
+          'jasmine',
+          'jasmine-ajax',
+          'jasmine-jquery'
+        ]
+
   #    Load the plugin
   grunt.loadNpmTasks 'grunt-karma'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
@@ -58,12 +82,17 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-bump'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-clean'
+  grunt.loadNpmTasks 'grunt-contrib-concat'
+  grunt.loadNpmTasks 'grunt-bower-concat'
 
   #   Default task
   grunt.registerTask( 'default', ['coffeelint','coffee' ])
+  grunt.registerTask('buildbower', ['bower_concat', 'uglify:bower'])
   grunt.registerTask( 'minor', [
     'coffeelint',
     'coffee',
+    'buildbower',
+    'concat',
     'uglify',
     'bump:minor'])
   grunt.registerTask( 'major', [

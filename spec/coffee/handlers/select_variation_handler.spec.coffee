@@ -19,6 +19,7 @@ describe 'SelectVariationHandler', ->
       fixture.load('handlers/on_click_variation.html', true)
       variations = [
         {
+         "id": 444
          "product_name": "T-Shirt (Color: Green)"
          "sku": "POLO222"
          "thumb_url": "/uploads/will1/image/file/2/t-shirt.thumb.jpg"
@@ -39,10 +40,13 @@ describe 'SelectVariationHandler', ->
       @url = document.URL
       new SelectVariationHandler()
   
-    it 'update price, update url params', ->
+    it 'update price, update url params, update image\'s carousel, toggle buy button', ->
       $("input[data-role='variation'][value='Green']").attr('checked',true).click()
       expect($("#regular-price").text()).toBe 'US$ 500,00'
       expect($("#sales-price").text()).toBe 'US$ 500,00'
+      expect($("input[type='hidden'][name='variation_selected']").val()).toBe '444'
+      expect($("#buy-button").text()).toBe 'indisponível'
+      expect($("#buy-button").attr('disabled')).toBeTruthy()
       expect(window.location.toString()).toEqual 'http://localhost:9876/context.html?Color=Green'
 
     afterEach ->
