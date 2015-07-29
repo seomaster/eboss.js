@@ -12,13 +12,25 @@ class @CartTemplates
             <h4 class='modal-title' id='myModalLabel'>Item adicionado ao carrinho de compras!</h4>
           </div>
           <div class='modal-body'>
-            <p><img src='#{variation.thumb_url}'></p>
-            <p>#{variation.product_name}</p>
-            <p>#{MoneyHelper.currency(variation.sale_price)}</p>
-            <p>#{MoneyHelper.currency(variation.regular_price)}</p>
-            <ul>
-              #{attributes}
-            </ul>
+            <div class="row">
+              <div class="thumb col-xs-3">
+                <img src='#{variation.thumb_url}' class="img-responsive">   
+              </div>
+              <div class="details col-xs-9">
+                <h5 class="title">#{variation.product_name}</h5>
+                <div class="price-now">#{MoneyHelper.currency(variation.sale_price)}</div>
+                <div class="price-old">#{MoneyHelper.currency(variation.regular_price)}</div>
+                <ul class="attributes">
+                  #{attributes}
+                </ul>
+              </div>
+            </div>
+            <div class="row action-next">
+              <div class="col-xs-9 col-xs-offset-3">
+                <a class="btn btn-primary checkout">finalizar compra »</a>
+                <div class="keep-shopping"><a href="#" data-dismiss="modal">voltar para tela anterior</a></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
