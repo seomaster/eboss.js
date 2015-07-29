@@ -24,9 +24,7 @@ describe 'SelectVariationHandler', ->
          "product_name": "T-Shirt"
          "thumb_url": "/uploads/will1/image/file/2/t-shirt.thumb.jpg"
          "sale_price": 500.0
-         "sale_price_formatted": "US$ 500,00"
          "regular_price": 500.0
-         "regular_price_formatted":"US$ 500,00"
          "qty_in_stock": 0
          "options": [{"Color":"Green"}]
          "variation_images": [3, 4]
@@ -42,8 +40,8 @@ describe 'SelectVariationHandler', ->
   
     it 'update price, update url params, update image\'s carousel, toggle buy button', ->
       $("input[data-role='variation'][value='Green']").attr('checked',true).click()
-      expect($("#regular-price").text()).toBe 'US$ 500,00'
-      expect($("#sales-price").text()).toBe 'US$ 500,00'
+      expect($("#regular-price").text()).toBe 'R$ 500,00'
+      expect($("#sale-price").text()).toBe 'R$ 500,00'
       expect($("input[type='hidden'][name='variation_selected']").val()).toBe '444'
       expect($("#buy-button").text()).toBe 'indisponível'
       expect($("#buy-button").attr('disabled')).toBeTruthy()

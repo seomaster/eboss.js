@@ -3,13 +3,13 @@ class @SelectVariationController
 
   updateSalesPrice: (variations) ->
     if variations.length == 1
-      SelectVariationHelper.updatePrice("div[data-role='sales-price']",
-        variations[0].sale_price_formatted)
+      SelectVariationHelper.updatePrice("div[data-role='sale-price']",
+        MoneyHelper.currency(variations[0].sale_price))
 
   updateRegularPrice: (variations) ->
     if variations.length == 1
       SelectVariationHelper.updatePrice("div[data-role='regular-price']",
-        variations[0].regular_price_formatted)
+        MoneyHelper.currency(variations[0].regular_price))
 
   updateHistoryState: (element) ->
     SelectVariationHelper

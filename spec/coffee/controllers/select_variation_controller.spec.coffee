@@ -20,7 +20,7 @@ describe 'SelectVariationController', ->
     it 'update regular price value', ->
       variations = [
         {
-          regular_price_formatted: 'R$ 500,00'
+          regular_price: 500.0
         }
       ]
       @controller.updateRegularPrice variations
@@ -36,16 +36,16 @@ describe 'SelectVariationController', ->
     it 'not update sales price', ->
       variations = []
       @controller.updateSalesPrice(variations)
-      expect($("div[data-role='sales-price']").text()).not.toBe "R$ 123,00"
+      expect($("div[data-role='sale-price']").text()).not.toBe "R$ 123,00"
 
     it 'update sales price value', ->
       variations = [
         {
-          sale_price_formatted: 'R$ 500,00'
+          sale_price: 500.0
         }
       ]
       @controller.updateSalesPrice variations
-      expect($("div[data-role='sales-price']").text()).toBe "R$ 500,00"
+      expect($("div[data-role='sale-price']").text()).toBe "R$ 500,00"
 
   describe 'updateHistoryState', ->
     beforeEach ->

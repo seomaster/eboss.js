@@ -275,7 +275,7 @@
         option = ref[i];
         attributes = attributes + ("<li>" + (_.keys(option)[0]) + ": " + (_.values(option)[0]) + "</li>");
       }
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Item adicionado ao carrinho de compras!</h4>\n      </div>\n      <div class='modal-body'>\n        <p><img src='" + variation.thumb_url + "'></p>\n        <p>" + variation.product_name + "</p>\n        <p>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n        <p>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        <ul>\n          " + attributes + "\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Item adicionado ao carrinho de compras!</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"thumb col-xs-3\">\n            <img src='" + variation.thumb_url + "' class=\"img-responsive\">   \n          </div>\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">" + variation.product_name + "</h5>\n            <div class=\"price-now\">" + (MoneyHelper.currency(variation.sale_price)) + "</div>\n            <div class=\"price-old\">" + (MoneyHelper.currency(variation.regular_price)) + "</div>\n            <ul class=\"attributes\">\n              " + attributes + "\n            </ul>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9 col-xs-offset-3\">\n            <a class=\"btn btn-primary checkout\">finalizar compra »</a>\n            <div class=\"keep-shopping\"><a href=\"#\" data-dismiss=\"modal\">voltar para tela anterior</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
@@ -684,13 +684,13 @@
 
     SelectVariationController.prototype.updateSalesPrice = function(variations) {
       if (variations.length === 1) {
-        return SelectVariationHelper.updatePrice("div[data-role='sales-price']", variations[0].sale_price_formatted);
+        return SelectVariationHelper.updatePrice("div[data-role='sale-price']", MoneyHelper.currency(variations[0].sale_price));
       }
     };
 
     SelectVariationController.prototype.updateRegularPrice = function(variations) {
       if (variations.length === 1) {
-        return SelectVariationHelper.updatePrice("div[data-role='regular-price']", variations[0].regular_price_formatted);
+        return SelectVariationHelper.updatePrice("div[data-role='regular-price']", MoneyHelper.currency(variations[0].regular_price));
       }
     };
 
