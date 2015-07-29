@@ -20,15 +20,15 @@ describe 'SelectVariationHandler', ->
       variations = [
         {
          "id": 444
-         "product_name": "T-Shirt (Color: Green)"
          "sku": "POLO222"
+         "product_name": "T-Shirt"
          "thumb_url": "/uploads/will1/image/file/2/t-shirt.thumb.jpg"
          "sale_price": 500.0
          "sale_price_formatted": "US$ 500,00"
          "regular_price": 500.0
          "regular_price_formatted":"US$ 500,00"
          "qty_in_stock": 0
-         "options_values": ["Green"]
+         "options": [{"Color":"Green"}]
          "variation_images": [3, 4]
         }
       ]

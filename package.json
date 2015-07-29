@@ -1,6 +1,6 @@
 {
   "name": "eboss-js",
-  "version": "0.10.0",
+  "version": "0.2.0",
   "description": "Javascript Plugins for Eboss",
   "keywords": [
     "CoffeeScript",
@@ -24,8 +24,7 @@
     "type": "git",
     "url": "https://github.com/seomaster/eboss-js.git"
   },
-  "devDependencies": {
-    "chai": "^3.2.0",
+  "devDependencies": {    
     "coffee-errors": "^0.8.5",
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.10.1",
@@ -44,7 +43,6 @@
     "jasmine-jquery": "^2.1.0",
     "karma": "^0.12.31",
     "karma-bower": "^1.0.1",
-    "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^0.1.7",
     "karma-coffee-preprocessor": "^0.2.1",
     "karma-fixture": "^0.2.5",

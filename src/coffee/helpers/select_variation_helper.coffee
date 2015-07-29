@@ -37,7 +37,7 @@ class @SelectVariationHelper
     hash = {}
     for param in params
       p = param.split '='
-      hash[p[0]] = p[1]
+      hash[p[0]] = p[1] if p.length == 2
     hash
 
   @enableAllOptionButtons: ->

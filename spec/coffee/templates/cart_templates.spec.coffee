@@ -4,6 +4,7 @@ describe 'CartTemplates', ->
 
   describe 'selectedVariation', ->
     it 'render a selected variation', ->
+      pending 'not implemented yet.'
       variation = 
          "product_name": "T-Shirt (Color: Green)"
          "sku": "POLO222"
@@ -24,6 +25,7 @@ describe 'CartTemplates', ->
 
   describe 'cartItems', ->
     it 'render a list of items in cart', ->
+      pending 'not implemented yet.'
       cart = 
         'number_of_items': 6
         'line_items': [

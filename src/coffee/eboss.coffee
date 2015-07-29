@@ -1,4 +1,7 @@
 class @Eboss
   constructor: ->
     new SelectVariationHandler()
-    new CartHandler()
+    cart = new CartHandler()
+    cart.clickOnCart()
+    cart.clickOnAddToCart()
+    cart.onDocumentReady()

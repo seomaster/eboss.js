@@ -19,10 +19,10 @@ class @SelectVariationHandler
           @controller.updateSalesPrice(response)
           @controller.updateRegularPrice(response)
           @controller.updateImageCarousel(response)
-          @controller.toogleVariationButtons(event.target, response)
+          @controller.toogleOptionButtons(event.target, response)
           @controller.updateSelectedVariation(response)
           @controller.toggleBuyButton(response)
-          @controller.updateHistoryState($(this))
+          @controller.updateHistoryState(event.target)
       $.ajax request
 
   onDocumentReady: ->

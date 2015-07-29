@@ -56,7 +56,7 @@ describe 'SelectVariationHelper', ->
          "regular_price": 123.0
          "regular_price_formatted":"US$123,00"
          "qty_in_stock": 0
-         "options_values": ["Green"]
+         "options_values": [{"Color": "Green"}]
          "variation_images": [3, 4]
         }
       ]

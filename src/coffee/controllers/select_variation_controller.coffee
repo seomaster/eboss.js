@@ -17,29 +17,37 @@ class @SelectVariationController
 
   selectOptionsOnLoad: ->
     parameters = SelectVariationHelper.getURLParameters()
-    $("input[data-role='variation']").each (index, element) ->
-      name = $(element).attr 'name'
-      value = $(element).attr 'value'
-      if name of parameters and parameters[name] == value
-        $(element).attr 'checked', true
-        $(element).click()
+    if _.isEmpty(parameters)
+      first_options = $("ul.feature-options").find("input[data-role='variation']:first")
+      for option in first_options
+        $(option).attr 'checked', true
+        $(option).click()
+    else
+      options = $("input[data-role='variation']")
+      options.each (index, option) ->
+        name = $(option).attr 'name'
+        value = $(option).attr 'value'
+        if name of parameters and parameters[name] == value
+          $(option).attr 'checked', true
+          $(option).click()
 
   updateImageCarousel: (variations) ->
     SelectVariationHelper.updateImageCarousel(variations)
 
-  toogleVariationButtons: (buttonClicked, variations) ->
+  toogleOptionButtons: (buttonClicked, variations) ->
     button = $(buttonClicked)
     SelectVariationHelper.enableAllOptionButtons()
     for variation in variations
-      if variation.qty_in_stock == 0 and variation.options_values.length == 1
-        opt = variation.options_values[0]
+      if variation.qty_in_stock == 0 and variation.options.length == 1
+        opt = _.values(variation.options[0])[0]
         SelectVariationHelper
           .disableOptionButton($("input[type='radio'][value='#{opt}']"))
-      else if variation.qty_in_stock == 0 and variation.options_values.length > 1
-        for opt in variation.options_values
-          if opt != $(button).attr('value')
+      else if variation.qty_in_stock == 0 and variation.options.length > 1
+        for opt in variation.options
+          if _.values(opt)[0] != $(button).attr('value')
+            opt_value = _.values(opt)[0]
             SelectVariationHelper
-            .disableOptionButton($("input[type='radio'][value='#{opt}']"))
+            .disableOptionButton($("input[type='radio'][value='#{opt_value}']"))
 
   updateSelectedVariation: (variations) ->
     if variations.length == 1

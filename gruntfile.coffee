@@ -63,9 +63,10 @@ module.exports = (grunt) ->
     bower_concat: 
       all: 
         dest: 'dist/_bower.js',
-        include: [ 'underscore', 'underscore.inflection']
+        include: [ 'underscore', 'underscore.inflection', 'accounting']
         mainFiles: 
-          'underscore': ['underscore-min.js', 'underscore-min.map']
+          'underscore': ['underscore-min.js', 'underscore-min.map'],
+          'accounting': ['accounting.min.js']
         exclude: [
           'jquery',
           'bootstrap',

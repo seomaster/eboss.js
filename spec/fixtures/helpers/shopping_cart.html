@@ -1,7 +1,61 @@
-<div id="shopping-cart" class="col-md-3 hidden-sm hidden-xs">
-<div class="cart"><a href="#"><i class="fa fa-shopping-cart"></i></a>
+<div id="shopping-cart" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <div class="cart"><a href="Carrinho.html"><i class="fa fa-shopping-cart"></i></a>
   </div>
-  <div class="txt"><span class="title"><a href="#">Meu Carrinho</a></span>
-    <p class="items" data-role="cart-counter"><a href="#">0 itens</a></p>
+  <div class="txt"><span class="title"><a href="Carrinho.html">Meu Carrinho</a></span>
+    <p class="items" data-role="cart-counter"><a href="Carrinho.html">1 item</a>
+    </p>
   </div>
+</div>
+<div id="cart-content" class="cart-container dropdown-menu pull-right" aria-labelledby="shopping-cart">
+ <div class="panel panel-default">
+  <div class="loading"></div>
+  <div class="panel-heading">
+    <h4 class="panel-title">Itens no meu carrinho de compras: </h4>
+  </div>
+  <div class="panel-body">
+   <div class="item">
+    <div class="thumb col-xs-3">
+      <img src="" alt="Bola de futebol de campo">
+      <span class="remove-item"><a href="#" data-variation-id="13"><span class="remove">remover</span></a></span>
+    </div>
+    <div class="details col-xs-9">
+      <h5 class="title"><a href="/p/bola-de-futebol-de-campo?Cor=Branca">Bola de futebol de campo</a></h5>
+      <ul class="attributes">
+        <li>Cor: Branca</li>
+      </ul>
+      <div class="quantity-price">                    
+        <div class="how-many">
+          <input type="button" class="less" value="-">
+          <input type="text" class="qty" id="variation_qty_13" name="name" value="10" readonly="true">
+          <input type="button" class="more" value="+">
+          <input type="hidden" name="variation_id" value="13">
+        </div>
+        <div class="price">
+          <div class="amount">
+            <p class="current-price"><span class="x">x </span>R$ 200,00</p>
+            <p class="old-price">R$ 0,00</p>
+          </div>
+        </div>
+      </div>
+      <div class="total-price">
+        <p class="current-price">R$ 200,00</p>
+        <p class="old-price">R$ 0,00</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel-footer">
+  <div class="row">
+    <div class="col-xs-5 subtotal">
+      <h5>Subtotal</h5>
+      <p>R$ 200,00</p>
+    </div>
+    <div class="col-xs-7 action-checkout text-right">
+      <a id="checkout-button" class="btn btn-primary">finalizar compra »</a>    
+    </div>
+  </div>
+  <div>
+  </div>
+</div>
+</div>
 </div>

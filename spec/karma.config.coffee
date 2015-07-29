@@ -13,9 +13,10 @@ module.exports = (config) ->
 
     bowerPackages: ['jquery', 'jasmine-ajax', 'jasmine-jquery', 'underscore', 'underscore.inflection', 'bootstrap']
 
-
   # list of files / patterns to load in the browser
     files: [
+      'lib/accounting/accounting.js',
+      
     # Load all the libraries your build needs while testing
       {pattern: 'lib/**/*.js', included: false},
 

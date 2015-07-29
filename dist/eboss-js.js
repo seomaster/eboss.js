@@ -1,3 +1,7 @@
+/*!
+ * accounting.js v0.3.2, copyright 2011 Joss Crowcroft, MIT license, http://josscrowcroft.github.com/accounting.js
+ */
+(function(p,z){function q(a){return!!(""===a||a&&a.charCodeAt&&a.substr)}function m(a){return u?u(a):"[object Array]"===v.call(a)}function r(a){return"[object Object]"===v.call(a)}function s(a,b){var d,a=a||{},b=b||{};for(d in b)b.hasOwnProperty(d)&&null==a[d]&&(a[d]=b[d]);return a}function j(a,b,d){var c=[],e,h;if(!a)return c;if(w&&a.map===w)return a.map(b,d);for(e=0,h=a.length;e<h;e++)c[e]=b.call(d,a[e],e,a);return c}function n(a,b){a=Math.round(Math.abs(a));return isNaN(a)?b:a}function x(a){var b=c.settings.currency.format;"function"===typeof a&&(a=a());return q(a)&&a.match("%v")?{pos:a,neg:a.replace("-","").replace("%v","-%v"),zero:a}:!a||!a.pos||!a.pos.match("%v")?!q(b)?b:c.settings.currency.format={pos:b,neg:b.replace("%v","-%v"),zero:b}:a}var c={version:"0.3.2",settings:{currency:{symbol:"$",format:"%s%v",decimal:".",thousand:",",precision:2,grouping:3},number:{precision:0,grouping:3,thousand:",",decimal:"."}}},w=Array.prototype.map,u=Array.isArray,v=Object.prototype.toString,o=c.unformat=c.parse=function(a,b){if(m(a))return j(a,function(a){return o(a,b)});a=a||0;if("number"===typeof a)return a;var b=b||".",c=RegExp("[^0-9-"+b+"]",["g"]),c=parseFloat((""+a).replace(/\((.*)\)/,"-$1").replace(c,"").replace(b,"."));return!isNaN(c)?c:0},y=c.toFixed=function(a,b){var b=n(b,c.settings.number.precision),d=Math.pow(10,b);return(Math.round(c.unformat(a)*d)/d).toFixed(b)},t=c.formatNumber=function(a,b,d,i){if(m(a))return j(a,function(a){return t(a,b,d,i)});var a=o(a),e=s(r(b)?b:{precision:b,thousand:d,decimal:i},c.settings.number),h=n(e.precision),f=0>a?"-":"",g=parseInt(y(Math.abs(a||0),h),10)+"",l=3<g.length?g.length%3:0;return f+(l?g.substr(0,l)+e.thousand:"")+g.substr(l).replace(/(\d{3})(?=\d)/g,"$1"+e.thousand)+(h?e.decimal+y(Math.abs(a),h).split(".")[1]:"")},A=c.formatMoney=function(a,b,d,i,e,h){if(m(a))return j(a,function(a){return A(a,b,d,i,e,h)});var a=o(a),f=s(r(b)?b:{symbol:b,precision:d,thousand:i,decimal:e,format:h},c.settings.currency),g=x(f.format);return(0<a?g.pos:0>a?g.neg:g.zero).replace("%s",f.symbol).replace("%v",t(Math.abs(a),n(f.precision),f.thousand,f.decimal))};c.formatColumn=function(a,b,d,i,e,h){if(!a)return[];var f=s(r(b)?b:{symbol:b,precision:d,thousand:i,decimal:e,format:h},c.settings.currency),g=x(f.format),l=g.pos.indexOf("%s")<g.pos.indexOf("%v")?!0:!1,k=0,a=j(a,function(a){if(m(a))return c.formatColumn(a,f);a=o(a);a=(0<a?g.pos:0>a?g.neg:g.zero).replace("%s",f.symbol).replace("%v",t(Math.abs(a),n(f.precision),f.thousand,f.decimal));if(a.length>k)k=a.length;return a});return j(a,function(a){return q(a)&&a.length<k?l?a.replace(f.symbol,f.symbol+Array(k-a.length+1).join(" ")):Array(k-a.length+1).join(" ")+a:a})};if("undefined"!==typeof exports){if("undefined"!==typeof module&&module.exports)exports=module.exports=c;exports.accounting=c}else"function"===typeof define&&define.amd?define([],function(){return c}):(c.noConflict=function(a){return function(){p.accounting=a;c.noConflict=z;return c}}(p.accounting),p.accounting=c)})(this);
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -264,34 +268,56 @@
     function CartTemplates() {}
 
     CartTemplates.selectedVariation = function(variation) {
-      var i, key, len, ref, template;
-      template = "<div id='selected_variation' class='modal fade'>" + "<div class='modal-header'><a class='close' data-dismiss='modal'>x</a>" + "<h3>Item adicionado ao carrinho de compras!</h3>" + "</div>" + "<div class='modal-body'>" + ("<p><img src='" + variation.thumb_url + "'></p>") + ("<p>" + variation.product_name + "</p>") + ("<p>" + variation.regular_price_formatted + "</p>");
-      ref = variation.options_values;
+      var attributes, i, len, option, ref, template;
+      attributes = '';
+      ref = variation.options;
       for (i = 0, len = ref.length; i < len; i++) {
-        key = ref[i];
-        template = template + ("<p>" + key + "</p>");
+        option = ref[i];
+        attributes = attributes + ("<li>" + (_.keys(option)[0]) + ": " + (_.values(option)[0]) + "</li>");
       }
-      template = template + "</div></div>";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Item adicionado ao carrinho de compras!</h4>\n      </div>\n      <div class='modal-body'>\n        <p><img src='" + variation.thumb_url + "'></p>\n        <p>" + variation.product_name + "</p>\n        <p>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n        <p>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        <ul>\n          " + attributes + "\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
     CartTemplates.cartItems = function(line_items) {
-      var i, item, j, key, len, len1, ref, template, variation, variation_tmp;
-      template = "<div id='selected_variation' class='modal fade'>" + "<div class='modal-header'><a class='close' data-dismiss='modal'>x</a>" + "<h3>Item adicionado ao carrinho de compras!</h3>" + "</div><div class='modal-body'>";
+      var attributes, i, item, j, len, len1, option, ref, template, variation, variation_tmp;
       variation_tmp = '';
-      for (i = 0, len = line_items.length; i < len; i++) {
-        item = line_items[i];
-        variation = item.variation;
-        variation_tmp = variation_tmp + ("<div><p><img src='" + variation.thumb_url + "'></p>") + ("<p>" + variation.product_name + "</p>") + ("<p>Quantidade: " + item.qty + "</p>") + ("<p>" + variation.regular_price_formatted + "</p>");
-        ref = variation.options_values;
-        for (j = 0, len1 = ref.length; j < len1; j++) {
-          key = ref[j];
-          variation_tmp = variation_tmp + ("<p>" + key + "</p>");
+      if (line_items.length === 0) {
+        variation_tmp = this.emptyCart();
+      } else {
+        for (i = 0, len = line_items.length; i < len; i++) {
+          item = line_items[i];
+          variation = item.variation;
+          attributes = '';
+          ref = item.variation.options;
+          for (j = 0, len1 = ref.length; j < len1; j++) {
+            option = ref[j];
+            attributes = attributes + ("<li>" + (_.keys(option)[0]) + ": " + (_.values(option)[0]) + "</li>");
+          }
+          variation_tmp = variation_tmp + (variation_tmp = " <div class='item'>\n  <div class='thumb col-xs-3'>\n    <img src='" + variation.thumb_url + "' alt='" + variation.product_name + "'>\n    <span class='remove-item'><a href='#' data-variation-id='" + variation.id + "'><span class='remove'>remover</span></a></span>\n  </div>\n  <div class='details col-xs-9'>\n    <h5 class='title'><a href=\"" + variation.permalink + "?" + (this.queryString(item)) + "\">" + variation.product_name + "</a></h5>\n    <ul class='attributes'>\n      " + attributes + "\n    </ul>\n    <div class='quantity-price'>                    \n      <div class='how-many'>\n        <input type='button' class='less' value='-'>\n        <input type=\"text\"   class=\"qty\" id=\"variation_qty_" + variation.id + "\" name=\"name\" value=\"" + item.qty + "\" readonly=\"true\"/>\n        <input type=\"button\" class=\"more\" value=\"+\" >\n        <input type=\"hidden\" name=\"variation_id\" value=\"" + variation.id + "\" />\n      </div>\n      <div class='price'>\n        <div class='amount'>\n          <p class='current-price'><span class=\"x\">x </span>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n          <p class='old-price'>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        </div>\n      </div>\n    </div>\n    <div class='total-price'>\n      <p class='current-price'>" + (MoneyHelper.currency(item.qty * variation.sale_price)) + "</p>\n      <p class='old-price'>" + (MoneyHelper.currency(item.qty * variation.regular_price)) + "</p>\n    </div>\n  </div>\n</div>");
         }
-        variation_tmp = variation_tmp + "</div>";
       }
-      template = template + variation_tmp + "</div></div>";
+      template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">Itens no meu carrinho de compras: </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        <a id=\"checkout-button\" class=\"btn btn-primary\">finalizar compra »</a>    \n      </div>\n    </div>\n  <div>\n</div>";
       return template;
+    };
+
+    CartTemplates.queryString = function(item) {
+      var i, len, option, queryString, ref;
+      queryString = '';
+      ref = item.variation.options;
+      for (i = 0, len = ref.length; i < len; i++) {
+        option = ref[i];
+        queryString = queryString + ((_.keys(option)[0]) + "=" + (_.values(option)[0]));
+        if (option !== _.last(item.variation.options)) {
+          queryString = queryString + "&";
+        }
+      }
+      return queryString;
+    };
+
+    CartTemplates.emptyCart = function() {
+      var empty;
+      return empty = "<div class=\"empty-cart\">\n  <div>O carrinho está vazio.</div>\n</div>";
     };
 
     return CartTemplates;
@@ -307,14 +333,79 @@
     CartHelper.plusOneCounterItems = function() {
       var numberOfItems;
       _.plural('item', 'itens');
-      numberOfItems = /\d+/.exec($("p[data-role='cart-counter']").text());
-      numberOfItems = parseInt(numberOfItems) + 1;
-      return $("p[data-role='cart-counter'] a").text("" + (_('item').pluralize(numberOfItems, true)));
+      numberOfItems = /\d+/.exec($("[data-role='cart-counter'] a").text());
+      if (numberOfItems === null) {
+        numberOfItems = 1;
+      } else {
+        numberOfItems = parseInt(numberOfItems) + 1;
+      }
+      return $("[data-role='cart-counter'] a").text("" + (_('item').pluralize(numberOfItems, true)));
+    };
+
+    CartHelper.minusOneCounterItems = function() {
+      var numberOfItems;
+      _.plural('item', 'itens');
+      numberOfItems = /\d+/.exec($("[data-role='cart-counter'] a").text());
+      numberOfItems = parseInt(numberOfItems) - 1;
+      if (numberOfItems === 0) {
+        return $("[data-role='cart-counter'] a").text('vazio');
+      } else {
+        return $("[data-role='cart-counter'] a").text("" + (_('item').pluralize(numberOfItems, true)));
+      }
     };
 
     CartHelper.updateCounterItems = function(numberOfItems) {
       _.plural('item', 'itens');
-      return $("p[data-role='cart-counter']").text("" + (_('item').pluralize(numberOfItems, true)));
+      if (numberOfItems === 0) {
+        return $("[data-role='cart-counter'] a").text('vazio');
+      } else {
+        return $("[data-role='cart-counter'] a").text("" + (_('item').pluralize(numberOfItems, true)));
+      }
+    };
+
+    CartHelper.minusOneItemInCart = function(element) {
+      var quantity;
+      quantity = parseInt($(element).siblings("input[type='text'][class='qty']").val());
+      if (quantity > 0) {
+        quantity = quantity - 1;
+        $(element).siblings("input[type='text'][class='qty']").val(quantity);
+        return CartHelper.updatePriceByQuantity(element, quantity);
+      }
+    };
+
+    CartHelper.plusOneItemInCart = function(element) {
+      var quantity;
+      quantity = parseInt($(element).siblings("input[type='text'][class='qty']").val());
+      quantity = quantity + 1;
+      $(element).siblings("input[type='text'][class='qty']").val(quantity);
+      return CartHelper.updatePriceByQuantity(element, quantity);
+    };
+
+    CartHelper.updatePriceByQuantity = function(element, qty) {
+      var current_price, old_price, quantity_price, total_prices;
+      quantity_price = $(element).parent().parent();
+      current_price = MoneyHelper.value($(quantity_price).find('p.current-price').text());
+      old_price = MoneyHelper.value($(quantity_price).find('p.old-price').text());
+      total_prices = $(element).parent().parent().siblings('.total-price');
+      $(total_prices).find('p.current-price').text(MoneyHelper.currency(qty * current_price));
+      return $(total_prices).find('p.old-price').text(MoneyHelper.currency(qty * old_price));
+    };
+
+    CartHelper.updateSubTotal = function() {
+      this.calculateSubTotalFor($("#shopping-cart"));
+      return this.calculateSubTotalFor($("#shopping-cart-responsive"));
+    };
+
+    CartHelper.calculateSubTotalFor = function(cart) {
+      var cart_content, prices, sum;
+      cart_content = $(cart).siblings("div#cart-content");
+      prices = _.map($(cart_content).find("div.total-price p.current-price"), function(elem) {
+        return $(elem).text();
+      });
+      sum = _.reduce(prices, (function(memo, num) {
+        return memo + MoneyHelper.value(num);
+      }), 0);
+      return $(cart_content).find("div.subtotal p").text(MoneyHelper.currency(sum));
     };
 
     CartHelper.openCartModal = function(template) {
@@ -324,7 +415,62 @@
       });
     };
 
+    CartHelper.showCart = function(template) {
+      $("div#cart-content").remove();
+      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart"));
+      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart-responsive"));
+      $("div#cart-content").html(template);
+      return $('div#cart-content').click(function(e) {
+        return e.stopPropagation();
+      });
+    };
+
+    CartHelper.removeCartItem = function(variation) {
+      var item;
+      item = $("a[data-variation-id='" + variation + "']").closest('div.item');
+      return $(item).slideUp(500, function() {
+        $(item).remove();
+        if ($("div#cart-content div.panel-body").children().length === 0) {
+          $("div#cart-content div.panel-body").html(CartTemplates.emptyCart());
+        }
+        return CartHelper.updateSubTotal();
+      });
+    };
+
     return CartHelper;
+
+  })();
+
+}).call(this);
+
+(function() {
+  this.MoneyHelper = (function() {
+    function MoneyHelper() {}
+
+    accounting.settings = {
+      currency: {
+        symbol: "R$",
+        format: "%s %v",
+        decimal: ",",
+        thousand: ".",
+        precision: 2
+      },
+      number: {
+        precision: 2,
+        thousand: ",",
+        decimal: "."
+      }
+    };
+
+    MoneyHelper.currency = function(value) {
+      return accounting.formatMoney(value);
+    };
+
+    MoneyHelper.value = function(currency) {
+      return accounting.unformat(currency, ',');
+    };
+
+    return MoneyHelper;
 
   })();
 
@@ -367,7 +513,9 @@
       for (i = 0, len = params.length; i < len; i++) {
         param = params[i];
         p = param.split('=');
-        hash[p[0]] = p[1];
+        if (p.length === 2) {
+          hash[p[0]] = p[1];
+        }
       }
       return hash;
     };
@@ -379,7 +527,7 @@
       return radio_buttons.closest('li').removeClass('unavailable').removeAttr('title');
     };
 
-    SelectVariationHelper.disableVariationButton = function(button) {
+    SelectVariationHelper.disableOptionButton = function(button) {
       $(button).attr('disabled', true).prop('checked', false);
       return $(button).closest('li').removeClass('active').addClass('unavailable').attr('title', 'Indisponível');
     };
@@ -425,10 +573,11 @@
       var data, form, url;
       form = $("form[id='add_to_cart']");
       data = $(form).serialize();
-      url = '/add_to_cart.json';
+      url = '/cart.json';
       return $.ajax(url, {
         dataType: 'json',
         method: 'post',
+        async: true,
         data: data,
         success: function(data, status, jqXHR) {
           CartHelper.plusOneCounterItems();
@@ -448,10 +597,77 @@
       return $.ajax(url, {
         dataType: 'json',
         method: 'get',
+        async: true,
         data: data,
         success: function(response, status, jqXHR) {
+          var cart;
           CartHelper.updateCounterItems(response.number_of_items);
-          return CartHelper.openCartModal(CartTemplates.cartItems(response.line_items));
+          CartHelper.showCart(CartTemplates.cartItems(response.line_items));
+          CartHelper.updateSubTotal();
+          cart = new CartHandler();
+          cart.clickOnRemoveCartItem();
+          cart.onScrollCart();
+          cart.onClickMinus();
+          return cart.onClickPlus();
+        }
+      });
+    };
+
+    CartController.updateCartCounter = function() {
+      var data, form, url;
+      form = $("form[id='add_to_cart']");
+      data = $(form).serialize();
+      url = '/cart.json';
+      return $.ajax(url, {
+        dataType: 'json',
+        method: 'get',
+        async: true,
+        data: data,
+        success: function(response, status, jqXHR) {
+          return CartHelper.updateCounterItems(response.number_of_items);
+        }
+      });
+    };
+
+    CartController.removeCartItem = function(variation_id) {
+      var data, token, url;
+      token = $("input[type='hidden'][name='authenticity_token']").val();
+      data = {
+        variation: variation_id,
+        authenticity_token: token
+      };
+      $("div.panel div.loading").toggleClass('overlay');
+      url = "/cart.json";
+      return $.ajax(url, {
+        dataType: 'json',
+        method: 'delete',
+        async: true,
+        data: $.param(data),
+        success: function(response, status, jqXHR) {
+          CartHelper.removeCartItem(variation_id);
+          CartHelper.updateCounterItems(response.number_of_items);
+          return $("div.panel div.loading").toggleClass('overlay');
+        }
+      });
+    };
+
+    CartController.updateVariationQuantityInCart = function(variation_id, quantity) {
+      var data, token, url;
+      token = $("input[type='hidden'][name='authenticity_token']").val();
+      data = {
+        authenticity_token: token,
+        variation: variation_id,
+        quantity: quantity
+      };
+      $("div.panel div.loading").toggleClass('overlay');
+      url = "/cart.json";
+      return $.ajax(url, {
+        dataType: 'json',
+        method: 'put',
+        async: true,
+        data: $.param(data),
+        success: function(response, status, jqXHR) {
+          return $("div.panel div.loading").toggleClass('overlay');
         }
       });
     };
@@ -483,42 +699,55 @@
     };
 
     SelectVariationController.prototype.selectOptionsOnLoad = function() {
-      var parameters;
+      var first_options, i, len, option, options, parameters, results;
       parameters = SelectVariationHelper.getURLParameters();
-      return $("input[data-role='variation']").each(function(index, element) {
-        var name, value;
-        name = $(element).attr('name');
-        value = $(element).attr('value');
-        if (name in parameters && parameters[name] === value) {
-          $(element).attr('checked', true);
-          return $(element).click();
+      if (_.isEmpty(parameters)) {
+        first_options = $("ul.feature-options").find("input[data-role='variation']:first");
+        results = [];
+        for (i = 0, len = first_options.length; i < len; i++) {
+          option = first_options[i];
+          $(option).attr('checked', true);
+          results.push($(option).click());
         }
-      });
+        return results;
+      } else {
+        options = $("input[data-role='variation']");
+        return options.each(function(index, option) {
+          var name, value;
+          name = $(option).attr('name');
+          value = $(option).attr('value');
+          if (name in parameters && parameters[name] === value) {
+            $(option).attr('checked', true);
+            return $(option).click();
+          }
+        });
+      }
     };
 
     SelectVariationController.prototype.updateImageCarousel = function(variations) {
       return SelectVariationHelper.updateImageCarousel(variations);
     };
 
-    SelectVariationController.prototype.toogleVariationButtons = function(buttonClicked, variations) {
-      var button, i, len, opt, results, variation;
+    SelectVariationController.prototype.toogleOptionButtons = function(buttonClicked, variations) {
+      var button, i, len, opt, opt_value, results, variation;
       button = $(buttonClicked);
       SelectVariationHelper.enableAllOptionButtons();
       results = [];
       for (i = 0, len = variations.length; i < len; i++) {
         variation = variations[i];
-        if (variation.qty_in_stock === 0 && variation.options_values.length === 1) {
-          opt = variation.options_values[0];
-          results.push(SelectVariationHelper.disableVariationButton($("input[type='radio'][value='" + opt + "']")));
-        } else if (variation.qty_in_stock === 0 && variation.options_values.length > 1) {
+        if (variation.qty_in_stock === 0 && variation.options.length === 1) {
+          opt = _.values(variation.options[0])[0];
+          results.push(SelectVariationHelper.disableOptionButton($("input[type='radio'][value='" + opt + "']")));
+        } else if (variation.qty_in_stock === 0 && variation.options.length > 1) {
           results.push((function() {
             var j, len1, ref, results1;
-            ref = variation.options_values;
+            ref = variation.options;
             results1 = [];
             for (j = 0, len1 = ref.length; j < len1; j++) {
               opt = ref[j];
-              if (opt !== $(button).attr('value')) {
-                results1.push(SelectVariationHelper.disableVariationButton($("input[type='radio'][value='" + opt + "']")));
+              if (_.values(opt)[0] !== $(button).attr('value')) {
+                opt_value = _.values(opt)[0];
+                results1.push(SelectVariationHelper.disableOptionButton($("input[type='radio'][value='" + opt_value + "']")));
               } else {
                 results1.push(void 0);
               }
@@ -554,24 +783,90 @@
 
 (function() {
   this.CartHandler = (function() {
-    function CartHandler() {
-      this.clickOnCart();
-      this.clickOnAddToCart();
-    }
+    function CartHandler() {}
 
     CartHandler.prototype.clickOnCart = function() {
+      $("#shopping-cart-responsive").children().on('click', function(e) {
+        e.preventDefault();
+        return CartController.showCart();
+      });
       return $('#shopping-cart').children().on('click', function(e) {
         e.preventDefault();
-        e.stopPropagation();
         return CartController.showCart();
       });
     };
 
     CartHandler.prototype.clickOnAddToCart = function() {
-      return $('a#buy-button').on('click', function(e) {
+      return $('#buy-button').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         return CartController.addToCart();
+      });
+    };
+
+    CartHandler.prototype.clickOnRemoveCartItem = function() {
+      return $("span.remove-item a").on('click', function(e) {
+        var variationId;
+        e.preventDefault();
+        e.stopPropagation();
+        if (confirm('Tem certeza de que deseja remover este item?')) {
+          variationId = $(e.target).parent().data('variationId');
+          CartController.removeCartItem(variationId);
+          return CartController.updateCartCounter();
+        }
+      });
+    };
+
+    CartHandler.prototype.onScrollCart = function() {
+      return $("#cart-content .panel-body").on('mousewheel DOMMouseScroll', function(e) {
+        var scrollTo;
+        scrollTo = null;
+        if (e.type === 'mousewheel') {
+          scrollTo = e.originalEvent.wheelDelta * -1;
+        } else if (e.type === 'DOMMouseScroll') {
+          scrollTo = 40 * e.originalEvent.detail;
+        }
+        if (scrollTo) {
+          e.preventDefault();
+          return $(this).scrollTop(scrollTo + $(this).scrollTop());
+        }
+      });
+    };
+
+    CartHandler.prototype.onClickMinus = function() {
+      return $("input[type='button'][class='less']").on('click', function(e) {
+        var quantity, variationId;
+        variationId = $(e.target).siblings("input[type='hidden']").val();
+        quantity = parseInt($(e.target).siblings("input[type='text']").val());
+        if (quantity - 1 === 0) {
+          if (confirm('Tem certeza de que deseja remover esse item?')) {
+            CartController.removeCartItem(variationId);
+            return CartController.updateCartCounter();
+          }
+        } else {
+          CartController.updateVariationQuantityInCart(variationId, quantity - 1);
+          CartHelper.minusOneItemInCart(e.target);
+          CartHelper.updateSubTotal();
+          return CartController.updateCartCounter();
+        }
+      });
+    };
+
+    CartHandler.prototype.onClickPlus = function() {
+      return $("input[type='button'][class='more']").on('click', function(e) {
+        var quantity, variationId;
+        variationId = $(e.target).siblings("input[type='hidden']").val();
+        quantity = $(e.target).siblings("input[type='text']").val();
+        CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1);
+        CartHelper.plusOneItemInCart(e.target);
+        CartHelper.updateSubTotal();
+        return CartController.updateCartCounter();
+      });
+    };
+
+    CartHandler.prototype.onDocumentReady = function() {
+      return $(window).bind('load', function() {
+        return CartController.updateCartCounter();
       });
     };
 
@@ -605,10 +900,10 @@
             this.controller.updateSalesPrice(response);
             this.controller.updateRegularPrice(response);
             this.controller.updateImageCarousel(response);
-            this.controller.toogleVariationButtons(event.target, response);
+            this.controller.toogleOptionButtons(event.target, response);
             this.controller.updateSelectedVariation(response);
             this.controller.toggleBuyButton(response);
-            return this.controller.updateHistoryState($(this));
+            return this.controller.updateHistoryState(event.target);
           }
         };
         return $.ajax(request);
@@ -633,8 +928,12 @@
 (function() {
   this.Eboss = (function() {
     function Eboss() {
+      var cart;
       new SelectVariationHandler();
-      new CartHandler();
+      cart = new CartHandler();
+      cart.clickOnCart();
+      cart.clickOnAddToCart();
+      cart.onDocumentReady();
     }
 
     return Eboss;
