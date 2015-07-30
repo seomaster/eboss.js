@@ -409,10 +409,7 @@
     };
 
     CartHelper.openCartModal = function(template) {
-      return $(template).modal({
-        backdrop: 'static',
-        keyboard: false
-      });
+      return $(template).modal();
     };
 
     CartHelper.showCart = function(template) {
@@ -537,7 +534,7 @@
     };
 
     SelectVariationHelper.updateImageCarousel = function(variations) {
-      var huges, i, image, images, len, thumbs, variation;
+      var hugeVideo, huges, i, image, images, len, thumbVideo, thumbs, variation;
       if (this.carouselIsDefined()) {
         if (variations.length === 1) {
           variation = variations[0];
@@ -546,6 +543,12 @@
           $('div#thumb-nav').hide().empty();
           huges = [];
           thumbs = [];
+          if (!_.isEmpty($("div[data-huge='video']"))) {
+            hugeVideo = "div[data-huge='video']";
+            thumbVideo = "div[data-thumb='video']";
+            huges.push($('div#huge-placeholder').find(hugeVideo).clone());
+            thumbs.push($('div#thumb-placeholder').find(thumbVideo).clone());
+          }
           for (i = 0, len = images.length; i < len; i++) {
             image = images[i];
             huges.push($('div#huge-placeholder').find("div[data-huge='variation_" + image + "']").clone());

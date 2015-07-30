@@ -64,6 +64,13 @@ class @SelectVariationHelper
         $('div#thumb-nav').hide().empty()
         huges = []
         thumbs = []
+        
+        if not _.isEmpty($("div[data-huge='video']")) 
+          hugeVideo = "div[data-huge='video']"
+          thumbVideo = "div[data-thumb='video']"
+          huges.push($('div#huge-placeholder').find(hugeVideo).clone())
+          thumbs.push($('div#thumb-placeholder').find(thumbVideo).clone())
+
         for image in images
           huges.push($('div#huge-placeholder')
             .find("div[data-huge='variation_#{image}']").clone())

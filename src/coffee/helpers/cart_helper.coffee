@@ -59,7 +59,7 @@ class @CartHelper
     $(cart_content).find("div.subtotal p").text MoneyHelper.currency(sum)
 
   @openCartModal: (template) ->
-    $(template).modal({backdrop:'static', keyboard: false})
+    $(template).modal()
 
   @showCart: (template) ->
     $("div#cart-content").remove()
