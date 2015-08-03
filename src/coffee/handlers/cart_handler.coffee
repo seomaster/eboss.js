@@ -35,6 +35,25 @@ class @CartHandler
         e.preventDefault()
         $(this).scrollTop scrollTo + $(this).scrollTop()
 
+  onlyNumbers: ->
+    $("input[type='text'][class='qty']").keypress (e) ->
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57))
+       return false
+
+  onChangeQuantity: ->
+    $("input[type='text'][class='qty']").on 'change', (e) ->
+      variationId = $(e.target).siblings("input[type='hidden']").val()
+      quantity = parseInt $(e.target).val()
+      if quantity is 0
+        if confirm 'Tem certeza de que deseja remover esse item?'
+          CartController.removeCartItem(variationId)
+          CartController.updateCartCounter()
+      else
+        CartController.updateVariationQuantityInCart(variationId, quantity)
+        CartHelper.updateSubTotal()
+        CartHelper.updatePriceByQuantity(e.target, quantity)
+        CartController.updateCartCounter()
+
   onClickMinus: -> 
     $("input[type='button'][class='less']").on 'click', (e) ->
       variationId = $(e.target).siblings("input[type='hidden']").val()

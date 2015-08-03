@@ -32,6 +32,8 @@ class @CartController
         cart = new CartHandler()
         cart.clickOnRemoveCartItem()
         cart.onScrollCart()
+        cart.onlyNumbers()
+        cart.onChangeQuantity()
         cart.onClickMinus()
         cart.onClickPlus()
 

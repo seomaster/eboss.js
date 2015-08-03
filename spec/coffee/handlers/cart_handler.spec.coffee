@@ -57,14 +57,14 @@ describe 'CartHandler', ->
       fixture.cleanup()
 
     it 'reduce item\'s quantity by one on cart', ->
-      spyUpdateVariationQuantityInCart = spyOn(CartController, 'updateVariationQuantityInCart')
+      #spyUpdateVariationQuantityInCart = spyOn(CartController, 'updateVariationQuantityInCart')
       spyMinusOneItemInCart = spyOn(CartHelper, 'minusOneItemInCart')
       spyUpdateSubTotal = spyOn(CartHelper, 'updateSubTotal')
       spyUpdateCartCounter = spyOn(CartController, 'updateCartCounter')
 
       $("input[type='button'][class='less']").click()
 
-      expect(spyUpdateVariationQuantityInCart).toHaveBeenCalled()
+      #expect(spyUpdateVariationQuantityInCart).toHaveBeenCalled()
       expect(spyMinusOneItemInCart).toHaveBeenCalled()
       expect(spyUpdateSubTotal).toHaveBeenCalled()
       expect(spyUpdateCartCounter).toHaveBeenCalled()
@@ -99,3 +99,27 @@ describe 'CartHandler', ->
       expect(spyUpdateVariationQuantityInCart).toHaveBeenCalled()
       expect(spyPlusOneItemInCart).toHaveBeenCalled()
       expect(spyUpdateSubTotal).toHaveBeenCalled()
+
+  describe 'onChangeQuantity', ->
+    beforeEach ->
+      fixture.load 'handlers/shopping_cart.html', true
+      @handler = new CartHandler()
+      @handler.onlyNumbers()
+      @handler.onChangeQuantity()
+
+    afterEach ->
+      fixture.cleanup()
+
+    it 'change item\'s quantity on cart', ->
+      aspyUpdateVariationQuantityInCart = spyOn(CartController, 'updateVariationQuantityInCart')
+      spyUpdateSubTotal = spyOn(CartHelper, 'updateSubTotal')
+      spyUpdatePriceByQuantity = spyOn(CartHelper, 'updatePriceByQuantity')
+      spyUpdateCartCounter = spyOn(CartController, 'updateCartCounter')
+
+      $("input[type='text'][class='qty'][id='variation_qty_13']").val(10)
+      $("input[type='text'][class='qty'][id='variation_qty_13']").trigger('change')
+
+      expect(spyUpdateVariationQuantityInCart).toHaveBeenCalled()
+      expect(spyUpdateSubTotal).toHaveBeenCalled()
+      expect(spyUpdatePriceByQuantity).toHaveBeenCalled()
+      expect(spyUpdateCartCounter).toHaveBeenCalled()

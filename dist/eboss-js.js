@@ -294,7 +294,7 @@
             option = ref[j];
             attributes = attributes + ("<li>" + (_.keys(option)[0]) + ": " + (_.values(option)[0]) + "</li>");
           }
-          variation_tmp = variation_tmp + (variation_tmp = " <div class='item'>\n  <div class='thumb col-xs-3'>\n    <img src='" + variation.thumb_url + "' alt='" + variation.product_name + "'>\n    <span class='remove-item'><a href='#' data-variation-id='" + variation.id + "'><span class='remove'>remover</span></a></span>\n  </div>\n  <div class='details col-xs-9'>\n    <h5 class='title'><a href=\"" + variation.permalink + "?" + (this.queryString(item)) + "\">" + variation.product_name + "</a></h5>\n    <ul class='attributes'>\n      " + attributes + "\n    </ul>\n    <div class='quantity-price'>                    \n      <div class='how-many'>\n        <input type='button' class='less' value='-'>\n        <input type=\"text\"   class=\"qty\" id=\"variation_qty_" + variation.id + "\" name=\"name\" value=\"" + item.qty + "\" readonly=\"true\"/>\n        <input type=\"button\" class=\"more\" value=\"+\" >\n        <input type=\"hidden\" name=\"variation_id\" value=\"" + variation.id + "\" />\n      </div>\n      <div class='price'>\n        <div class='amount'>\n          <p class='current-price'><span class=\"x\">x </span>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n          <p class='old-price'>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        </div>\n      </div>\n    </div>\n    <div class='total-price'>\n      <p class='current-price'>" + (MoneyHelper.currency(item.qty * variation.sale_price)) + "</p>\n      <p class='old-price'>" + (MoneyHelper.currency(item.qty * variation.regular_price)) + "</p>\n    </div>\n  </div>\n</div>");
+          variation_tmp = variation_tmp + (variation_tmp = " <div class='item'>\n  <div class='thumb col-xs-3'>\n    <img src='" + variation.thumb_url + "' alt='" + variation.product_name + "'>\n    <span class='remove-item'><a href='#' data-variation-id='" + variation.id + "'><span class='remove'>remover</span></a></span>\n  </div>\n  <div class='details col-xs-9'>\n    <h5 class='title'><a href=\"" + variation.permalink + "?" + (this.queryString(item)) + "\">" + variation.product_name + "</a></h5>\n    <ul class='attributes'>\n      " + attributes + "\n    </ul>\n    <div class='quantity-price'>                    \n      <div class='how-many'>\n        <input type='button' class='less' value='-'>\n        <input type=\"text\"   class=\"qty\" id=\"variation_qty_" + variation.id + "\" name=\"name\" value=\"" + item.qty + "\" maxlength=\"2\" />\n        <input type=\"button\" class=\"more\" value=\"+\" >\n        <input type=\"hidden\" name=\"variation_id\" value=\"" + variation.id + "\" />\n      </div>\n      <div class='price'>\n        <div class='amount'>\n          <p class='current-price'><span class=\"x\">x </span>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n          <p class='old-price'>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        </div>\n      </div>\n    </div>\n    <div class='total-price'>\n      <p class='current-price'>" + (MoneyHelper.currency(item.qty * variation.sale_price)) + "</p>\n      <p class='old-price'>" + (MoneyHelper.currency(item.qty * variation.regular_price)) + "</p>\n    </div>\n  </div>\n</div>");
         }
       }
       template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">Itens no meu carrinho de compras: </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        <a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">finalizar compra »</a>    \n      </div>\n    </div>\n  <div>\n</div>";
@@ -610,6 +610,8 @@
           cart = new CartHandler();
           cart.clickOnRemoveCartItem();
           cart.onScrollCart();
+          cart.onlyNumbers();
+          cart.onChangeQuantity();
           cart.onClickMinus();
           return cart.onClickPlus();
         }
@@ -834,6 +836,33 @@
         if (scrollTo) {
           e.preventDefault();
           return $(this).scrollTop(scrollTo + $(this).scrollTop());
+        }
+      });
+    };
+
+    CartHandler.prototype.onlyNumbers = function() {
+      return $("input[type='text'][class='qty']").keypress(function(e) {
+        if (e.which !== 8 && e.which !== 0 && (e.which < 48 || e.which > 57)) {
+          return false;
+        }
+      });
+    };
+
+    CartHandler.prototype.onChangeQuantity = function() {
+      return $("input[type='text'][class='qty']").on('change', function(e) {
+        var quantity, variationId;
+        variationId = $(e.target).siblings("input[type='hidden']").val();
+        quantity = parseInt($(e.target).val());
+        if (quantity === 0) {
+          if (confirm('Tem certeza de que deseja remover esse item?')) {
+            CartController.removeCartItem(variationId);
+            return CartController.updateCartCounter();
+          }
+        } else {
+          CartController.updateVariationQuantityInCart(variationId, quantity);
+          CartHelper.updateSubTotal();
+          CartHelper.updatePriceByQuantity(e.target, quantity);
+          return CartController.updateCartCounter();
         }
       });
     };

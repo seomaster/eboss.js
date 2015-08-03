@@ -60,7 +60,7 @@ class @CartHelper
 
   @openCartModal: (template) ->
     $(template).modal()
-
+      
   @showCart: (template) ->
     $("div#cart-content").remove()
     $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart"))
