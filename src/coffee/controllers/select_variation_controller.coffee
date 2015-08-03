@@ -54,7 +54,8 @@ class @SelectVariationController
       $("input[type='hidden'][name='variation_selected']").val(variations[0].id)
 
   toggleBuyButton: (variations)->
-    if variations.length == 1 and variations[0].qty_in_stock == 0
-      $("#buy-button").text('indisponível').attr('disabled', true)
-    else
-      $("#buy-button").text('comprar').attr('disabled', false)
+    if variations.length == 1 
+      if variations[0].qty_in_stock == 0
+        $("#buy-button").text('indisponível').attr('disabled', true)
+      else
+        $("#buy-button").text('comprar').attr('disabled', false)

@@ -771,10 +771,12 @@
     };
 
     SelectVariationController.prototype.toggleBuyButton = function(variations) {
-      if (variations.length === 1 && variations[0].qty_in_stock === 0) {
-        return $("#buy-button").text('indisponível').attr('disabled', true);
-      } else {
-        return $("#buy-button").text('comprar').attr('disabled', false);
+      if (variations.length === 1) {
+        if (variations[0].qty_in_stock === 0) {
+          return $("#buy-button").text('indisponível').attr('disabled', true);
+        } else {
+          return $("#buy-button").text('comprar').attr('disabled', false);
+        }
       }
     };
 
