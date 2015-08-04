@@ -57,14 +57,14 @@ describe 'CartHandler', ->
       fixture.cleanup()
 
     it 'reduce item\'s quantity by one on cart', ->
-      #spyUpdateVariationQuantityInCart = spyOn(CartController, 'updateVariationQuantityInCart')
+      spyUpdateVariationQuantityInCart = spyOn(CartController, 'updateVariationQuantityInCart')
       spyMinusOneItemInCart = spyOn(CartHelper, 'minusOneItemInCart')
       spyUpdateSubTotal = spyOn(CartHelper, 'updateSubTotal')
       spyUpdateCartCounter = spyOn(CartController, 'updateCartCounter')
 
       $("input[type='button'][class='less']").click()
 
-      #expect(spyUpdateVariationQuantityInCart).toHaveBeenCalled()
+      expect(spyUpdateVariationQuantityInCart).toHaveBeenCalled()
       expect(spyMinusOneItemInCart).toHaveBeenCalled()
       expect(spyUpdateSubTotal).toHaveBeenCalled()
       expect(spyUpdateCartCounter).toHaveBeenCalled()
@@ -111,7 +111,7 @@ describe 'CartHandler', ->
       fixture.cleanup()
 
     it 'change item\'s quantity on cart', ->
-      aspyUpdateVariationQuantityInCart = spyOn(CartController, 'updateVariationQuantityInCart')
+      spyUpdateVariationQuantityInCart = spyOn(CartController, 'updateVariationQuantityInCart')
       spyUpdateSubTotal = spyOn(CartHelper, 'updateSubTotal')
       spyUpdatePriceByQuantity = spyOn(CartHelper, 'updatePriceByQuantity')
       spyUpdateCartCounter = spyOn(CartController, 'updateCartCounter')

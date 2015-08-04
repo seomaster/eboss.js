@@ -48,7 +48,7 @@ class @CartTemplates
         
         attributes = ''
         for option in item.variation.options
-          attributes = attributes + "<li>#{_.keys(option)[0]}: #{_.values(option)[0]}</li>"
+          attributes = attributes + "<li>#{_.keys(option)[0].trim()}: #{_.values(option)[0].trim()}</li>"
           
         variation_tmp = variation_tmp +
         variation_tmp= """

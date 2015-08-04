@@ -27,17 +27,26 @@ describe 'SelectVariationHelper', ->
     it 'add parameter to browser\'s url', ->
       SelectVariationHelper.addParameterToURL('Color', 'Green')
       expect(window.location.toString()).toEqual 'http://localhost:9876/context.html?Color=Green'
+      SelectVariationHelper.addParameterToURL('Material Type', 'Iron')
+      expect(window.location.toString()).toEqual 'http://localhost:9876/context.html?Color=Green&Material%20Type=Iron'
 
    describe 'getURLParameters', ->
     beforeEach ->
-        @url = document.URL
-      afterEach ->
-        window.history.replaceState(@url, "Title", @url);
+      @url = document.URL
+    afterEach ->
+      window.history.replaceState(@url, "Title", @url);
+
     it 'get params from querystring', ->
       SelectVariationHelper.addParameterToURL('Color', 'Green')
       SelectVariationHelper.addParameterToURL('Size', 'P')
       params = SelectVariationHelper.getURLParameters()
       expect(params).toEqual {'Color': 'Green', 'Size' : 'P'}
+
+    it 'get param from querystring with spaces',  ->
+      SelectVariationHelper.addParameterToURL('Material Type', 'Iron')
+      SelectVariationHelper.addParameterToURL('Size', 'P')
+      params = SelectVariationHelper.getURLParameters()
+      expect(params).toEqual {'Color': 'Green', 'Material Type': 'Iron', 'Size' : 'P'}
 
   describe 'updateImageCarousel', ->
     beforeEach ->

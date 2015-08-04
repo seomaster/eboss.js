@@ -292,7 +292,7 @@
           ref = item.variation.options;
           for (j = 0, len1 = ref.length; j < len1; j++) {
             option = ref[j];
-            attributes = attributes + ("<li>" + (_.keys(option)[0]) + ": " + (_.values(option)[0]) + "</li>");
+            attributes = attributes + ("<li>" + (_.keys(option)[0].trim()) + ": " + (_.values(option)[0].trim()) + "</li>");
           }
           variation_tmp = variation_tmp + (variation_tmp = " <div class='item'>\n  <div class='thumb col-xs-3'>\n    <img src='" + variation.thumb_url + "' alt='" + variation.product_name + "'>\n    <span class='remove-item'><a href='#' data-variation-id='" + variation.id + "'><span class='remove'>remover</span></a></span>\n  </div>\n  <div class='details col-xs-9'>\n    <h5 class='title'><a href=\"" + variation.permalink + "?" + (this.queryString(item)) + "\">" + variation.product_name + "</a></h5>\n    <ul class='attributes'>\n      " + attributes + "\n    </ul>\n    <div class='quantity-price'>                    \n      <div class='how-many'>\n        <input type='button' class='less' value='-'>\n        <input type=\"text\"   class=\"qty\" id=\"variation_qty_" + variation.id + "\" name=\"name\" value=\"" + item.qty + "\" maxlength=\"2\" />\n        <input type=\"button\" class=\"more\" value=\"+\" >\n        <input type=\"hidden\" name=\"variation_id\" value=\"" + variation.id + "\" />\n      </div>\n      <div class='price'>\n        <div class='amount'>\n          <p class='current-price'><span class=\"x\">x </span>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n          <p class='old-price'>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        </div>\n      </div>\n    </div>\n    <div class='total-price'>\n      <p class='current-price'>" + (MoneyHelper.currency(item.qty * variation.sale_price)) + "</p>\n      <p class='old-price'>" + (MoneyHelper.currency(item.qty * variation.regular_price)) + "</p>\n    </div>\n  </div>\n</div>");
         }
@@ -489,7 +489,7 @@
 
     SelectVariationHelper.addParameterToURL = function(param, value) {
       var qstring, url, val;
-      url = this.currentURL();
+      url = decodeURI(this.currentURL());
       val = new RegExp('(\\?|\\&)' + param + '=.*?(?=(&|$))');
       qstring = /\?.+$/;
       if (val.test(url)) {
@@ -505,7 +505,7 @@
     SelectVariationHelper.getURLParameters = function() {
       var hash, i, len, p, param, params, queryString;
       queryString = window.location.search.substr(window.location.search.indexOf("?") + 1);
-      params = queryString.split("&");
+      params = decodeURI(queryString).split("&");
       hash = {};
       for (i = 0, len = params.length; i < len; i++) {
         param = params[i];
@@ -774,10 +774,14 @@
 
     SelectVariationController.prototype.toggleBuyButton = function(variations) {
       if (variations.length === 1) {
-        if (variations[0].qty_in_stock === 0) {
-          return $("#buy-button").text('indisponível').attr('disabled', true);
-        } else {
+        if (variations[0].is_virtual) {
           return $("#buy-button").text('comprar').attr('disabled', false);
+        } else {
+          if (variations[0].qty_in_stock === 0) {
+            return $("#buy-button").text('indisponível').attr('disabled', true);
+          } else {
+            return $("#buy-button").text('comprar').attr('disabled', false);
+          }
         }
       }
     };

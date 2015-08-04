@@ -8,7 +8,7 @@ class @SelectVariationHelper
 
   @addParameterToURL: (param, value) ->
     #Assuming that the url is the current URL
-    url = @currentURL()
+    url = decodeURI @currentURL()
 
     # Using a positive lookahead (?=\=) to find the
     # given parameter, preceded by a ? or &, and followed
@@ -33,7 +33,7 @@ class @SelectVariationHelper
   @getURLParameters: ->
     queryString = window.location
       .search.substr(window.location.search.indexOf("?") + 1)
-    params = queryString.split("&")
+    params = decodeURI(queryString).split("&")
     hash = {}
     for param in params
       p = param.split '='
