@@ -28,7 +28,7 @@ class @CartTemplates
             <div class="row action-next">
               <div class="col-xs-9 col-xs-offset-3">
                 <a class="btn btn-primary checkout">finalizar compra »</a>
-                <div class="keep-shopping"><a href="/checkout" data-dismiss="modal">voltar para tela anterior</a></div>
+                <div class="keep-shopping"><a href="/checkout" data-dismiss="modal">« continuar navegando</a></div>
               </div>
             </div>
           </div>
