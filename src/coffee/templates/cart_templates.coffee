@@ -76,6 +76,7 @@ class @CartTemplates
                 </div>
               </div>
             </div>
+            <a href="javascript:void(0)" class="item_update_qty"><i class="fa fa-refresh"></i> atualizar</a>
             <div class='total-price'>
               <p class='current-price'>#{MoneyHelper.currency(item.qty * variation.sale_price)}</p>
               <p class='old-price'>#{MoneyHelper.currency(item.qty * variation.regular_price)}</p>
