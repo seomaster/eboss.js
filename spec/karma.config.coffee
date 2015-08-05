@@ -79,7 +79,7 @@ module.exports = (config) ->
 
   # start browser
   # Only Chrome comes pre installed! Find more here: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS']
+    browsers: ['Chrome']
 
 
   # Continuous Integration mode
