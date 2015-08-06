@@ -861,6 +861,8 @@
           if (confirm('Tem certeza de que deseja remover esse item?')) {
             CartController.removeCartItem(variationId);
             return CartController.updateCartCounter();
+          } else {
+            return $(e.target).val(e.target.defaultValue);
           }
         } else {
           CartController.updateVariationQuantityInCart(variationId, quantity);

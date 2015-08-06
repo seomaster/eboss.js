@@ -48,6 +48,8 @@ class @CartHandler
         if confirm 'Tem certeza de que deseja remover esse item?'
           CartController.removeCartItem(variationId)
           CartController.updateCartCounter()
+        else
+          $(e.target).val(e.target.defaultValue)
       else
         CartController.updateVariationQuantityInCart(variationId, quantity)
         CartHelper.updateSubTotal()
