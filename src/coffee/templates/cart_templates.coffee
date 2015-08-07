@@ -69,7 +69,6 @@ class @CartTemplates
                 <input type="button" class="more" value="+" >
                 <input type="hidden" name="variation_id" value="#{variation.id}" />
               </div>
-              <a href="javascript:void()" class="item_update_qty"><i class="fa fa-refresh"></i> atualizar</a>
               <div class='price'>
                 <div class='amount'>
                   <p class='current-price'><span class="x">x </span>#{MoneyHelper.currency(variation.sale_price)}</p>

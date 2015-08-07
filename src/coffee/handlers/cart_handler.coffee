@@ -52,8 +52,8 @@ class @CartHandler
           $(e.target).val(e.target.defaultValue)
       else
         CartController.updateVariationQuantityInCart(variationId, quantity)
-        CartHelper.updateSubTotal()
         CartHelper.updatePriceByQuantity(e.target, quantity)
+        CartHelper.updateSubTotal()
         CartController.updateCartCounter()
 
   onClickMinus: -> 
