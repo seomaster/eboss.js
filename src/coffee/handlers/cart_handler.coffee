@@ -44,17 +44,20 @@ class @CartHandler
     $("input[type='text'][class='qty']").on 'change', (e) ->
       variationId = $(e.target).siblings("input[type='hidden']").val()
       quantity = parseInt $(e.target).val()
-      if quantity is 0
-        if confirm 'Tem certeza de que deseja remover esse item?'
-          CartController.removeCartItem(variationId)
-          CartController.updateCartCounter()
-        else
-          $(e.target).val(e.target.defaultValue)
+      if _.isNaN(quantity)
+        $(e.target).val(e.target.defaultValue)
       else
-        CartController.updateVariationQuantityInCart(variationId, quantity)
-        CartHelper.updatePriceByQuantity(e.target, quantity)
-        CartHelper.updateSubTotal()
-        CartController.updateCartCounter()
+        if quantity is 0
+          if confirm 'Tem certeza de que deseja remover esse item?'
+            CartController.removeCartItem(variationId)
+            CartController.updateCartCounter()
+          else
+            $(e.target).val(e.target.defaultValue)
+        else
+          CartController.updateVariationQuantityInCart(variationId, quantity)
+          CartHelper.updatePriceByQuantity(e.target, quantity)
+          CartHelper.updateSubTotal()
+          CartController.updateCartCounter()
 
   onClickMinus: -> 
     $("input[type='button'][class='less']").on 'click', (e) ->
@@ -78,7 +81,12 @@ class @CartHandler
       CartHelper.plusOneItemInCart(e.target)
       CartHelper.updateSubTotal()
       CartController.updateCartCounter()
-      
+  
+  onChangeTable: ->
+    $("#product-grid").bind "DOMSubtreeModified", (e) ->
+      if $("#product-grid>tbody>tr").length is 0
+        CartHelper.emptyCartPage()
+
   onDocumentReady: ->
     $(window).bind 'load', ->
       CartController.updateCartCounter()

@@ -39,18 +39,21 @@ class @CartController
 
   @updateCartCounter: ->
     form = $("form[id='add_to_cart']")
-    data = $(form).serialize()
-    url = '/cart.json'
-    $.ajax url,
-      dataType: 'json'
-      method: 'get'
-      async: true
-      data: data
-      success: (response, status, jqXHR) ->
-        CartHelper.updateCounterItems(response.number_of_items)
+    if form
+      data = $(form).serialize()
+      url = '/cart.json'
+      $.ajax url,
+        dataType: 'json'
+        method: 'get'
+        async: true
+        data: data
+        success: (response, status, jqXHR) ->
+          CartHelper.updateCounterItems(response.number_of_items)
 
   @removeCartItem: (variation_id) ->
     token = $("input[type='hidden'][name='authenticity_token']").val()
+    if not token
+      token = $("meta[name='csrf-token']").attr('content') 
     data = 
       variation: variation_id
       authenticity_token : token
@@ -68,6 +71,8 @@ class @CartController
 
   @updateVariationQuantityInCart: (variation_id, quantity) ->
     token = $("input[type='hidden'][name='authenticity_token']").val()
+    if not token
+      token = $("meta[name='csrf-token']").attr('content') 
     data = 
       authenticity_token : token
       variation: variation_id
@@ -80,5 +85,4 @@ class @CartController
       async: true
       data: $.param(data)
       success: (response, status, jqXHR) ->
-        $("div.panel div.loading").toggleClass('overlay')    
-        
+        $("div.panel div.loading").toggleClass('overlay')

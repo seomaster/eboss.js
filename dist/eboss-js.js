@@ -275,7 +275,7 @@
         option = ref[i];
         attributes = attributes + ("<li>" + (_.keys(option)[0]) + ": " + (_.values(option)[0]) + "</li>");
       }
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Item adicionado ao carrinho de compras!</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"thumb col-xs-3\">\n            <img src='" + variation.thumb_url + "' class=\"img-responsive\">   \n          </div>\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">" + variation.product_name + "</h5>\n            <div class=\"price-now\">" + (MoneyHelper.currency(variation.sale_price)) + "</div>\n            <div class=\"price-old\">" + (MoneyHelper.currency(variation.regular_price)) + "</div>\n            <ul class=\"attributes\">\n              " + attributes + "\n            </ul>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9 col-xs-offset-3\">\n            <a class=\"btn btn-primary checkout\">finalizar compra »</a>\n            <div class=\"keep-shopping\"><a href=\"/checkout\" data-dismiss=\"modal\">« continuar navegando</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Item adicionado ao carrinho de compras!</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"thumb col-xs-3\">\n            <img src='" + variation.thumb_url + "' class=\"img-responsive\">   \n          </div>\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">" + variation.product_name + "</h5>\n            <div class=\"price-now\">" + (MoneyHelper.currency(variation.sale_price)) + "</div>\n            <div class=\"price-old\">" + (MoneyHelper.currency(variation.regular_price)) + "</div>\n            <ul class=\"attributes\">\n              " + attributes + "\n            </ul>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9 col-xs-offset-3\">\n            <a href=\"/checkout\" class=\"btn btn-primary checkout\">finalizar compra »</a>\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« continuar navegando</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
@@ -384,11 +384,26 @@
     CartHelper.updatePriceByQuantity = function(element, qty) {
       var current_price, old_price, quantity_price, total_prices;
       quantity_price = $(element).parent().parent();
-      current_price = MoneyHelper.value($(quantity_price).find('p.current-price').text());
-      old_price = MoneyHelper.value($(quantity_price).find('p.old-price').text());
+      current_price = $(quantity_price).find('p.current-price');
+      if (current_price.length === 0) {
+        current_price = $(quantity_price).closest('tr').find('td.unit-price').find('p.current-price');
+      }
+      current_price = MoneyHelper.value(current_price.text());
+      old_price = $(quantity_price).find('p.old-price');
+      if (old_price.length === 0) {
+        old_price = $(quantity_price).closest('tr').find('td.unit-price').find('p.old-price');
+      }
+      old_price = MoneyHelper.value(old_price.text());
       total_prices = $(element).parent().parent().siblings('.total-price');
-      $(total_prices).find('p.current-price').text(MoneyHelper.currency(qty * current_price));
-      return $(total_prices).find('p.old-price').text(MoneyHelper.currency(qty * old_price));
+      if (total_prices.length === 0) {
+        total_prices = $(quantity_price).closest('tr').find('td.unit-subtotal');
+      }
+      if (current_price) {
+        $(total_prices).find('p.current-price').text(MoneyHelper.currency(qty * current_price));
+      }
+      if (old_price) {
+        return $(total_prices).find('p.old-price').text(MoneyHelper.currency(qty * old_price));
+      }
     };
 
     CartHelper.updateSubTotal = function() {
@@ -397,15 +412,22 @@
     };
 
     CartHelper.calculateSubTotalFor = function(cart) {
-      var cart_content, prices, sum;
+      var cart_content, prices, sub_total, sum;
       cart_content = $(cart).siblings("div#cart-content");
+      if (cart_content.length === 0) {
+        cart_content = $(cart).find('#product-grid > tbody > tr');
+      }
       prices = _.map($(cart_content).find("div.total-price p.current-price"), function(elem) {
         return $(elem).text();
       });
       sum = _.reduce(prices, (function(memo, num) {
         return memo + MoneyHelper.value(num);
       }), 0);
-      return $(cart_content).find("div.subtotal p").text(MoneyHelper.currency(sum));
+      sub_total = $(cart_content).find("div.subtotal p");
+      if (sub_total.length === 0) {
+        sub_total = $(cart).find('div#subtotal > div.amount p');
+      }
+      return $(sub_total).text(MoneyHelper.currency(sum));
     };
 
     CartHelper.openCartModal = function(template) {
@@ -425,6 +447,9 @@
     CartHelper.removeCartItem = function(variation) {
       var item;
       item = $("a[data-variation-id='" + variation + "']").closest('div.item');
+      if (item.length === 0) {
+        item = $("a[data-variation-id='" + variation + "']").closest('tr');
+      }
       return $(item).slideUp(500, function() {
         $(item).remove();
         if ($("div#cart-content div.panel-body").children().length === 0) {
@@ -432,6 +457,13 @@
         }
         return CartHelper.updateSubTotal();
       });
+    };
+
+    CartHelper.emptyCartPage = function() {
+      $("div.cart-is-empty").toggleClass('yes');
+      $("div#subtotal").hide();
+      $("#no-more-tables").empty();
+      return $("#no-more-tables").html(CartTemplates.emptyCart());
     };
 
     return CartHelper;
@@ -621,22 +653,27 @@
     CartController.updateCartCounter = function() {
       var data, form, url;
       form = $("form[id='add_to_cart']");
-      data = $(form).serialize();
-      url = '/cart.json';
-      return $.ajax(url, {
-        dataType: 'json',
-        method: 'get',
-        async: true,
-        data: data,
-        success: function(response, status, jqXHR) {
-          return CartHelper.updateCounterItems(response.number_of_items);
-        }
-      });
+      if (form) {
+        data = $(form).serialize();
+        url = '/cart.json';
+        return $.ajax(url, {
+          dataType: 'json',
+          method: 'get',
+          async: true,
+          data: data,
+          success: function(response, status, jqXHR) {
+            return CartHelper.updateCounterItems(response.number_of_items);
+          }
+        });
+      }
     };
 
     CartController.removeCartItem = function(variation_id) {
       var data, token, url;
       token = $("input[type='hidden'][name='authenticity_token']").val();
+      if (!token) {
+        token = $("meta[name='csrf-token']").attr('content');
+      }
       data = {
         variation: variation_id,
         authenticity_token: token
@@ -659,6 +696,9 @@
     CartController.updateVariationQuantityInCart = function(variation_id, quantity) {
       var data, token, url;
       token = $("input[type='hidden'][name='authenticity_token']").val();
+      if (!token) {
+        token = $("meta[name='csrf-token']").attr('content');
+      }
       data = {
         authenticity_token: token,
         variation: variation_id,
@@ -857,18 +897,22 @@
         var quantity, variationId;
         variationId = $(e.target).siblings("input[type='hidden']").val();
         quantity = parseInt($(e.target).val());
-        if (quantity === 0) {
-          if (confirm('Tem certeza de que deseja remover esse item?')) {
-            CartController.removeCartItem(variationId);
-            return CartController.updateCartCounter();
-          } else {
-            return $(e.target).val(e.target.defaultValue);
-          }
+        if (_.isNaN(quantity)) {
+          return $(e.target).val(e.target.defaultValue);
         } else {
-          CartController.updateVariationQuantityInCart(variationId, quantity);
-          CartHelper.updatePriceByQuantity(e.target, quantity);
-          CartHelper.updateSubTotal();
-          return CartController.updateCartCounter();
+          if (quantity === 0) {
+            if (confirm('Tem certeza de que deseja remover esse item?')) {
+              CartController.removeCartItem(variationId);
+              return CartController.updateCartCounter();
+            } else {
+              return $(e.target).val(e.target.defaultValue);
+            }
+          } else {
+            CartController.updateVariationQuantityInCart(variationId, quantity);
+            CartHelper.updatePriceByQuantity(e.target, quantity);
+            CartHelper.updateSubTotal();
+            return CartController.updateCartCounter();
+          }
         }
       });
     };
@@ -901,6 +945,14 @@
         CartHelper.plusOneItemInCart(e.target);
         CartHelper.updateSubTotal();
         return CartController.updateCartCounter();
+      });
+    };
+
+    CartHandler.prototype.onChangeTable = function() {
+      return $("#product-grid").bind("DOMSubtreeModified", function(e) {
+        if ($("#product-grid>tbody>tr").length === 0) {
+          return CartHelper.emptyCartPage();
+        }
       });
     };
 
@@ -966,8 +1018,8 @@
 }).call(this);
 
 (function() {
-  this.Eboss = (function() {
-    function Eboss() {
+  this.EbossCart = (function() {
+    function EbossCart() {
       var cart;
       new SelectVariationHandler();
       cart = new CartHandler();
@@ -976,7 +1028,22 @@
       cart.onDocumentReady();
     }
 
-    return Eboss;
+    return EbossCart;
+
+  })();
+
+  this.EbossCartPage = (function() {
+    function EbossCartPage() {
+      var cart;
+      cart = new CartHandler();
+      cart.clickOnRemoveCartItem();
+      cart.onClickMinus();
+      cart.onClickPlus();
+      cart.onChangeQuantity();
+      cart.onChangeTable();
+    }
+
+    return EbossCartPage;
 
   })();
 
