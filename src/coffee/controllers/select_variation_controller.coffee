@@ -56,9 +56,9 @@ class @SelectVariationController
   toggleBuyButton: (variations)->
     if variations.length == 1
       if variations[0].is_virtual
-        $("#buy-button").text('comprar').attr('disabled', false)
+        $("#buy-button").text($.t('cart.buy')).attr('disabled', false)
       else 
         if variations[0].qty_in_stock == 0
-          $("#buy-button").text('indisponível').attr('disabled', true)
+          $("#buy-button").text($.t('cart.unavailable')).attr('disabled', true)
         else
-          $("#buy-button").text('comprar').attr('disabled', false)
+          $("#buy-button").text($.t('cart.buy')).attr('disabled', false)

@@ -9,7 +9,7 @@ class @CartTemplates
         <div class='modal-content'>
           <div class='modal-header'>
             <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-            <h4 class='modal-title' id='myModalLabel'>Item adicionado ao carrinho de compras!</h4>
+            <h4 class='modal-title' id='myModalLabel'>#{$.t('cart.line_item_added')}</h4>
           </div>
           <div class='modal-body'>
             <div class="row">
@@ -27,8 +27,8 @@ class @CartTemplates
             </div>
             <div class="row action-next">
               <div class="col-xs-9 col-xs-offset-3">
-                <a href="/checkout" class="btn btn-primary checkout">finalizar compra »</a>
-                <div class="keep-shopping"><a href="/" data-dismiss="modal">« continuar navegando</a></div>
+                <a href="/checkout" class="btn btn-primary checkout">#{$.t('cart.finish_buy')} »</a>
+                <div class="keep-shopping"><a href="/" data-dismiss="modal">« #{$.t('cart.continue_shop')}</a></div>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@ class @CartTemplates
          <div class='item'>
           <div class='thumb col-xs-3'>
             <img src='#{variation.thumb_url}' alt='#{variation.product_name}'>
-            <span class='remove-item'><a href='#' data-variation-id='#{variation.id}'><span class='remove'>remover</span></a></span>
+            <span class='remove-item'><a href='#' data-variation-id='#{variation.id}'><span class='remove'>#{$.t('cart.remove')}</span></a></span>
           </div>
           <div class='details col-xs-9'>
             <h5 class='title'><a href="#{variation.permalink}?#{@queryString(item)}">#{variation.product_name}</a></h5>
@@ -76,7 +76,7 @@ class @CartTemplates
                 </div>
               </div>
             </div>
-            <a href="javascript:void(0)" class="item_update_qty"><i class="fa fa-refresh"></i> atualizar</a>
+            <a href="javascript:void(0)" class="item_update_qty"><i class="fa fa-refresh"></i> #{$.t('cart.update')}</a>
             <div class='total-price'>
               <p class='current-price'>#{MoneyHelper.currency(item.qty * variation.sale_price)}</p>
               <p class='old-price'>#{MoneyHelper.currency(item.qty * variation.regular_price)}</p>
@@ -89,7 +89,7 @@ class @CartTemplates
     <div class="panel panel-default">
       <div class="loading"></div>
       <div class="panel-heading">
-        <h4 class="panel-title">Itens no meu carrinho de compras: </h4>
+        <h4 class="panel-title">#{$.t('cart.line_items')} </h4>
       </div>
       <div class="panel-body">
         #{variation_tmp}
@@ -101,7 +101,7 @@ class @CartTemplates
             <p>R$ 0,00</p>
           </div>
           <div class="col-xs-7 action-checkout text-right">
-            <a href="/checkout" id="checkout-button" class="btn btn-primary">finalizar compra »</a>    
+            <a href="/checkout" id="checkout-button" class="btn btn-primary">#{$.t('cart.finish_buy')} »</a>    
           </div>
         </div>
       <div>

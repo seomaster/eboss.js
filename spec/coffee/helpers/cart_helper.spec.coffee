@@ -67,7 +67,7 @@ describe 'CartHelper', ->
 
       CartHelper.minusOneItemInCart(minusButton)
       expect(quantity.val()).toBe '9'
-      expect($(total_prices).find('p.current-price').text()).toBe 'R$ 1.800,00'
+      expect($(total_prices).find('p.current-price').text()).toBe '$1,800.00'
 
     it 'when quantity is zero does not update number of items', ->
       minusButton = $("input[type='button'][class='less']")
@@ -92,7 +92,7 @@ describe 'CartHelper', ->
       
       CartHelper.plusOneItemInCart(plusButton)
       expect(quantity.val()).toBe '11'
-      expect($(total_prices).find('p.current-price').text()).toBe 'R$ 2.200,00'
+      expect($(total_prices).find('p.current-price').text()).toBe '$2,200.00'
 
   describe 'updatePriceByQuantity', ->
     beforeEach ->
@@ -106,7 +106,7 @@ describe 'CartHelper', ->
       expect($(total_prices).find('p.current-price').text()).toBe 'R$ 200,00'
 
       CartHelper.updatePriceByQuantity(quantity, 10)
-      expect($(total_prices).find('p.current-price').text()).toBe 'R$ 2.000,00'
+      expect($(total_prices).find('p.current-price').text()).toBe '$2,000.00'
 
   describe 'calculateSubTotalFor', ->
     beforeEach ->
@@ -119,7 +119,7 @@ describe 'CartHelper', ->
       cart_content = $(cart).siblings("div#cart-content")
 
       CartHelper.calculateSubTotalFor(cart)
-      expect($(cart_content).find('div.subtotal p').text()).toBe 'R$ 200,00'
+      expect($(cart_content).find('div.subtotal p').text()).toBe '$200.00'
 
   describe 'removeCartItem', ->
     beforeEach ->
@@ -137,6 +137,6 @@ describe 'CartHelper', ->
  
       setTimeout( ()->
         expect($(item).is(':visible')).toBeFalsy()
-        expect($(cart_content).find('div.subtotal p').text()).toBe 'R$ 0,00'
+        expect($(cart_content).find('div.subtotal p').text()).toBe '$0.00'
       , 510);
       

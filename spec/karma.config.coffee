@@ -11,7 +11,7 @@ module.exports = (config) ->
   # available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['bower', 'fixture', 'jasmine-jquery','jasmine', 'sinon' ]
 
-    bowerPackages: ['jquery', 'jasmine-ajax', 'jasmine-jquery', 'underscore', 'underscore.inflection', 'bootstrap']
+    bowerPackages: ['jquery', 'jasmine-ajax', 'jasmine-jquery', 'underscore', 'underscore.inflection', 'bootstrap', 'i18next']
 
   # list of files / patterns to load in the browser
     files: [

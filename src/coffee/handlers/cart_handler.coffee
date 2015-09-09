@@ -19,7 +19,7 @@ class @CartHandler
     $("span.remove-item a").on 'click', (e) ->
       e.preventDefault()
       e.stopPropagation()
-      if confirm('Tem certeza de que deseja remover este item?')
+      if confirm($.t('cart.confirm_remove'))
         variationId = $(e.target).parent().data('variationId')
         CartController.removeCartItem(variationId)
         CartController.updateCartCounter()
@@ -48,7 +48,7 @@ class @CartHandler
         $(e.target).val(e.target.defaultValue)
       else
         if quantity is 0
-          if confirm 'Tem certeza de que deseja remover esse item?'
+          if confirm $.t('cart.confirm_remove')
             CartController.removeCartItem(variationId)
             CartController.updateCartCounter()
           else
@@ -64,7 +64,7 @@ class @CartHandler
       variationId = $(e.target).siblings("input[type='hidden']").val()
       quantity = parseInt $(e.target).siblings("input[type='text']").val()
       if quantity - 1 is 0 
-        if confirm 'Tem certeza de que deseja remover esse item?'
+        if confirm $.t('cart.confirm_remove')
           CartController.removeCartItem(variationId)
           CartController.updateCartCounter()
       else

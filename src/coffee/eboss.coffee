@@ -1,14 +1,17 @@
+# Cart for product's page
 class @EbossCart
-  constructor: ->
+  constructor: () ->
+    new I18n()
     new SelectVariationHandler()
     cart = new CartHandler()
     cart.clickOnCart()
     cart.clickOnAddToCart()
     cart.onDocumentReady()
 
-
+# Cart for cart's page
 class @EbossCartPage
-  constructor: ->
+  constructor: () ->
+    new I18n()
     cart = new CartHandler()
     cart.clickOnRemoveCartItem()
     cart.onClickMinus()

@@ -14,7 +14,7 @@ class @CartHelper
     numberOfItems = /\d+/.exec $("[data-role='cart-counter'] a").text()
     numberOfItems = parseInt(numberOfItems) - 1
     if numberOfItems is 0
-      $("[data-role='cart-counter'] a").text('vazio')
+      $("[data-role='cart-counter'] a").text($.t('cart.empty'))
     else
       $("[data-role='cart-counter'] a")
         .text("#{_('item').pluralize(numberOfItems, true)}")
@@ -22,7 +22,7 @@ class @CartHelper
   @updateCounterItems: (numberOfItems) ->
     _.plural('item', 'itens')
     if numberOfItems is 0
-      $("[data-role='cart-counter'] a").text('vazio')
+      $("[data-role='cart-counter'] a").text($.t('cart.empty'))
     else
       $("[data-role='cart-counter'] a")
       .text("#{_('item').pluralize(numberOfItems, true)}")

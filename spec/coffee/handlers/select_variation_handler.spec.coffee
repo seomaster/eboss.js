@@ -40,8 +40,8 @@ describe 'SelectVariationHandler', ->
   
     it 'update price, update url params, update image\'s carousel, toggle buy button', ->
       $("input[data-role='variation'][value='Green']").attr('checked',true).click()
-      expect($("#regular-price").text()).toBe 'R$ 500,00'
-      expect($("#sale-price").text()).toBe 'R$ 500,00'
+      expect($("#regular-price").text()).toBe '$500.00'
+      expect($("#sale-price").text()).toBe '$500.00'
       expect($("input[type='hidden'][name='variation_selected']").val()).toBe '444'
       expect($("#buy-button").text()).toBe 'indisponível'
       expect($("#buy-button").attr('disabled')).toBeTruthy()

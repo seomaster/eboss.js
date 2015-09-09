@@ -15,6 +15,7 @@ module.exports = (grunt) ->
       compile:
         files:
           "dist/eboss-js.js": [
+            "src/coffee/configs/**/*.coffee",
             "src/coffee/templates/*.coffee",
             "src/coffee/helpers/*.coffee",
             "src/coffee/controllers/*.coffee",
@@ -63,10 +64,11 @@ module.exports = (grunt) ->
     bower_concat: 
       all: 
         dest: 'dist/_bower.js',
-        include: [ 'underscore', 'underscore.inflection', 'accounting']
+        include: [ 'underscore', 'i18next', 'underscore.inflection', 'accounting']
         mainFiles: 
           'underscore': ['underscore-min.js', 'underscore-min.map'],
-          'accounting': ['accounting.min.js']
+          'accounting': ['accounting.min.js'],
+          'i18next': ['i18next.min.js']
         exclude: [
           'jquery',
           'bootstrap',

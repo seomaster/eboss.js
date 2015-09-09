@@ -24,7 +24,7 @@ describe 'SelectVariationController', ->
         }
       ]
       @controller.updateRegularPrice variations
-      expect($("div[data-role='regular-price']").text()).toBe "R$ 500,00"
+      expect($("div[data-role='regular-price']").text()).toBe "$500.00"
 
   describe 'updateSalesPrice', ->
     beforeEach ->
@@ -45,7 +45,7 @@ describe 'SelectVariationController', ->
         }
       ]
       @controller.updateSalesPrice variations
-      expect($("div[data-role='sale-price']").text()).toBe "R$ 500,00"
+      expect($("div[data-role='sale-price']").text()).toBe "$500.00"
 
   describe 'updateHistoryState', ->
     beforeEach ->
