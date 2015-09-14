@@ -321,6 +321,10 @@
               thousand: '.'
             },
             cart: {
+              item: {
+                one: 'item',
+                others: 'itens'
+              },
               line_items: 'Itens no meu carrinho de compras:',
               line_item_added: 'Item adicionado ao carrinho de compras!',
               finish_buy: 'finalizar compra',
@@ -339,6 +343,10 @@
         'en': {
           translation: {
             cart: {
+              item: {
+                one: 'item',
+                others: 'items'
+              },
               line_items: 'Items in my shopping cart:',
               line_item_added: 'Item added to cart',
               finish_buy: 'proceed to checkout',
@@ -350,7 +358,7 @@
               confirm_remove: 'Are you sure you want to remove this item?',
               update: 'update',
               buy: 'buy',
-              unavailable: 'unavailable'
+              unavailable: 'not available'
             }
           }
         }
@@ -417,7 +425,7 @@
 
     CartTemplates.emptyCart = function() {
       var empty;
-      return empty = "<div class=\"empty-cart\">\n  <div>O carrinho está vazio.</div>\n</div>";
+      return empty = "<div class=\"empty-cart\">\n  <div>" + ($.t('cart.empty_cart')) + "</div>\n</div>";
     };
 
     return CartTemplates;
@@ -432,19 +440,19 @@
 
     CartHelper.plusOneCounterItems = function() {
       var numberOfItems;
-      _.plural('item', 'itens');
+      _.plural($.t('cart.item.one'), $.t('cart.item.others'));
       numberOfItems = /\d+/.exec($("[data-role='cart-counter'] a").text());
       if (numberOfItems === null) {
         numberOfItems = 1;
       } else {
         numberOfItems = parseInt(numberOfItems) + 1;
       }
-      return $("[data-role='cart-counter'] a").text("" + (_('item').pluralize(numberOfItems, true)));
+      return $("[data-role='cart-counter'] a").text("" + (_($.t('cart.item')).pluralize(numberOfItems, true)));
     };
 
     CartHelper.minusOneCounterItems = function() {
       var numberOfItems;
-      _.plural('item', 'itens');
+      _.plural($.t('cart.item.one'), $.t('cart.item.others'));
       numberOfItems = /\d+/.exec($("[data-role='cart-counter'] a").text());
       numberOfItems = parseInt(numberOfItems) - 1;
       if (numberOfItems === 0) {
@@ -455,7 +463,7 @@
     };
 
     CartHelper.updateCounterItems = function(numberOfItems) {
-      _.plural('item', 'itens');
+      _.plural($.t('cart.item.one'), $.t('cart.item.others'));
       if (numberOfItems === 0) {
         return $("[data-role='cart-counter'] a").text($.t('cart.empty'));
       } else {

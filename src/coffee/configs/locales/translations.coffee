@@ -11,6 +11,9 @@ class @Translations
           decimal: ','
           thousand: '.'
         cart:
+          item:
+            one: 'item'
+            others: 'itens'
           line_items: 'Itens no meu carrinho de compras:'
           line_item_added: 'Item adicionado ao carrinho de compras!'
           finish_buy: 'finalizar compra'
@@ -26,6 +29,9 @@ class @Translations
     'en':
       translation:
         cart:
+          item:
+            one: 'item'
+            others: 'items'
           line_items: 'Items in my shopping cart:'
           line_item_added: 'Item added to cart'
           finish_buy: 'proceed to checkout'
@@ -37,4 +43,4 @@ class @Translations
           confirm_remove: 'Are you sure you want to remove this item?'
           update: 'update'
           buy: 'buy'
-          unavailable: 'unavailable'
+          unavailable: 'not available'

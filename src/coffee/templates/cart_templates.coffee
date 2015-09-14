@@ -120,6 +120,6 @@ class @CartTemplates
   @emptyCart: ->
     empty = """
       <div class="empty-cart">
-        <div>O carrinho está vazio.</div>
+        <div>#{$.t('cart.empty_cart')}</div>
       </div>
       """
