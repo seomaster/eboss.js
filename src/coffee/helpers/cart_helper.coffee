@@ -1,31 +1,31 @@
 class @CartHelper
   @plusOneCounterItems: ->
-    _.plural('item', 'itens')
+    _.plural($.t('cart.item.one'), $.t('cart.item.others'))
     numberOfItems = /\d+/.exec $("[data-role='cart-counter'] a").text()
     if numberOfItems is null
       numberOfItems = 1
     else
       numberOfItems = parseInt(numberOfItems) + 1
     $("[data-role='cart-counter'] a")
-      .text("#{_('item').pluralize(numberOfItems, true)}")
+      .text("#{_($.t('cart.item.one')).pluralize(numberOfItems, true)}")
   
   @minusOneCounterItems: ->
-    _.plural('item', 'itens')
+    _.plural($.t('cart.item.one'), $.t('cart.item.others'))
     numberOfItems = /\d+/.exec $("[data-role='cart-counter'] a").text()
     numberOfItems = parseInt(numberOfItems) - 1
     if numberOfItems is 0
       $("[data-role='cart-counter'] a").text($.t('cart.empty'))
     else
       $("[data-role='cart-counter'] a")
-        .text("#{_('item').pluralize(numberOfItems, true)}")
+        .text("#{_($.t('cart.item.one')).pluralize(numberOfItems, true)}")
 
   @updateCounterItems: (numberOfItems) ->
-    _.plural('item', 'itens')
+    _.plural($.t('cart.item.one'), $.t('cart.item.others'))
     if numberOfItems is 0
       $("[data-role='cart-counter'] a").text($.t('cart.empty'))
     else
       $("[data-role='cart-counter'] a")
-      .text("#{_('item').pluralize(numberOfItems, true)}")
+      .text("#{_($.t('cart.item.one')).pluralize(numberOfItems, true)}")
 
   @minusOneItemInCart: (element) ->
     quantity = parseInt($(element).siblings("input[type='text'][class='qty']").val())
