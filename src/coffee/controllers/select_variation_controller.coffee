@@ -34,21 +34,6 @@ class @SelectVariationController
   updateImageCarousel: (variations) ->
     SelectVariationHelper.updateImageCarousel(variations)
 
-  toogleOptionButtons: (buttonClicked, variations) ->
-    button = $(buttonClicked)
-    SelectVariationHelper.enableAllOptionButtons()
-    for variation in variations
-      if variation.qty_in_stock == 0 and variation.options.length == 1
-        opt = _.values(variation.options[0])[0]
-        SelectVariationHelper
-          .disableOptionButton($("input[type='radio'][value='#{opt}']"))
-      else if variation.qty_in_stock == 0 and variation.options.length > 1
-        for opt in variation.options
-          if _.values(opt)[0] != $(button).attr('value')
-            opt_value = _.values(opt)[0]
-            SelectVariationHelper
-            .disableOptionButton($("input[type='radio'][value='#{opt_value}']"))
-
   updateSelectedVariation: (variations) ->
     if variations.length == 1
       $("input[type='hidden'][name='variation_selected']").val(variations[0].id)

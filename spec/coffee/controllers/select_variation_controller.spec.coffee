@@ -96,44 +96,6 @@ describe 'SelectVariationController', ->
       expect($("input[name='Size'][value='M']").attr('checked')).not.toBeDefined()
       expect(spyEvent).toHaveBeenTriggered()
 
-  describe 'toggleOptionButtons', ->
-    beforeEach ->
-      fixture.load 'controllers/toggle_variation_buttons.html', true
-
-    afterEach ->
-      fixture.cleanup()
-
-    it 'toggle variation\'s button according with quantity in stock for one option', ->
-      variations = [
-        "product_name": "T-Shirt"
-        "qty_in_stock": 0
-        "options": [{"Color":"Green"}]
-      ]
-      button = $("input[type='radio'][value='Green']")
-      @controller.toogleOptionButtons(button, variations)
-      
-      expect(button.attr('disabled')).toBe 'disabled'
-      expect(button.parent().parent()).not.toHaveClass('active')
-      expect(button.parent().parent()).toHaveClass('unavailable')
-      expect(button.parent().parent().attr('title')).toBe 'Indisponível'
-
-    it 'toggle variation\'s button according with quantity in stock for two options', ->
-      variations = [
-        "product_name": "T-Shirt (Color: Green Size: G)"
-        "qty_in_stock": 0
-        "options": [{"Color":"Green"}, {"Size":"G"}]
-      ]
-
-      clickedButton = $("input[type='radio'][name='Color'][value='Green']")
-      sizeButton =  $("input[type='radio'][name='Size'][value='G']")
-      
-      @controller.toogleOptionButtons(clickedButton, variations)
-            
-      expect(sizeButton.attr('disabled')).toBe 'disabled'
-      expect(sizeButton.parent().parent()).not.toHaveClass('active')
-      expect(sizeButton.parent().parent()).toHaveClass('unavailable')
-      expect(sizeButton.parent().parent().attr('title')).toBe 'Indisponível'
-
   describe 'updateSelectedVariation', ->
     beforeEach ->
       fixture.load 'controllers/update_selected_variation.html', true

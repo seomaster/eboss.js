@@ -866,39 +866,6 @@
       return SelectVariationHelper.updateImageCarousel(variations);
     };
 
-    SelectVariationController.prototype.toogleOptionButtons = function(buttonClicked, variations) {
-      var button, i, len, opt, opt_value, results, variation;
-      button = $(buttonClicked);
-      SelectVariationHelper.enableAllOptionButtons();
-      results = [];
-      for (i = 0, len = variations.length; i < len; i++) {
-        variation = variations[i];
-        if (variation.qty_in_stock === 0 && variation.options.length === 1) {
-          opt = _.values(variation.options[0])[0];
-          results.push(SelectVariationHelper.disableOptionButton($("input[type='radio'][value='" + opt + "']")));
-        } else if (variation.qty_in_stock === 0 && variation.options.length > 1) {
-          results.push((function() {
-            var j, len1, ref, results1;
-            ref = variation.options;
-            results1 = [];
-            for (j = 0, len1 = ref.length; j < len1; j++) {
-              opt = ref[j];
-              if (_.values(opt)[0] !== $(button).attr('value')) {
-                opt_value = _.values(opt)[0];
-                results1.push(SelectVariationHelper.disableOptionButton($("input[type='radio'][value='" + opt_value + "']")));
-              } else {
-                results1.push(void 0);
-              }
-            }
-            return results1;
-          })());
-        } else {
-          results.push(void 0);
-        }
-      }
-      return results;
-    };
-
     SelectVariationController.prototype.updateSelectedVariation = function(variations) {
       if (variations.length === 1) {
         return $("input[type='hidden'][name='variation_selected']").val(variations[0].id);
@@ -1085,7 +1052,6 @@
             this.controller.updateSalesPrice(response);
             this.controller.updateRegularPrice(response);
             this.controller.updateImageCarousel(response);
-            this.controller.toogleOptionButtons(event.target, response);
             this.controller.updateSelectedVariation(response);
             this.controller.toggleBuyButton(response);
             return this.controller.updateHistoryState(event.target);
