@@ -336,7 +336,7 @@
               confirm_remove: 'Tem certeza de que deseja remover este item?',
               update: 'atualizar',
               unavailable: 'indisponível',
-              buy: 'comprar'
+              buy: 'adicionar ao carrinho'
             }
           }
         },
@@ -357,7 +357,7 @@
               remove: 'remove',
               confirm_remove: 'Are you sure you want to remove this item?',
               update: 'update',
-              buy: 'buy',
+              buy: 'add to cart',
               unavailable: 'not available'
             }
           }
