@@ -2,10 +2,7 @@ class @CartHandler
   constructor: ->
     
   clickOnCart: ->
-    $("#shopping-cart-responsive").children().on 'click', (e)->
-      e.preventDefault()
-      CartController.showCart()
-    $('#shopping-cart').children().on 'click', (e) ->
+    $('.cart-display').children().on 'click', (e) ->
       e.preventDefault()
       CartController.showCart()
 
