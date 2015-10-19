@@ -38,6 +38,29 @@ class @CartTemplates
     """
     template
 
+  @editCartItems: (line_items) ->
+    template = """
+    <div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>
+      <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+          <div class='modal-header'>
+            <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>
+          </div>
+          <div class='modal-body'>
+            #{CartTemplates.cartItems(line_items)}    
+            <div class="row action-next">
+              <div class="col-xs-9">
+                <div class="keep-shopping"><a href="/" data-dismiss="modal">« #{$.t('cart.continue_shop')}</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+    template
+
   @cartItems: (line_items) ->
     variation_tmp = ''
     if line_items.length is 0
@@ -108,6 +131,60 @@ class @CartTemplates
     </div>
     """
     template
+
+  @unavailableVariation: (variation) ->
+    template = """
+    <div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>
+      <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+          <div class='modal-header'>
+            <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            <h4 class='modal-title' id='myModalLabel'>Aviso: Quantidade indisponível em estoque</h4>
+          </div>
+          <div class='modal-body'>
+            <div class="row">
+              <div class="details col-xs-9">
+                <h5 class="title">A quantidade selecionada para o produto #{variation.product_name} está indisponível no estoque</h5>
+              </div>
+            </div>
+            <div class="row action-next">
+              <div class="col-xs-9">
+                <div class="keep-shopping"><a href="/" data-dismiss="modal">« #{$.t('cart.continue_shop')}</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+    """
+    template
+
+  @reviewCartItems: ->
+    template = """
+    <div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>
+      <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+          <div class='modal-header'>
+            <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+            <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>
+          </div>
+          <div class='modal-body'>
+            <div class="row">
+              <div class="details col-xs-9">
+                <h5 class="title">Algum produto em seu carrinho de compras está com a quantidade em estoque indisponível.</h5>
+              </div>
+            </div>
+            <div class="row action-next">
+              <div class="col-xs-9">
+                <div class="keep-shopping"><a href="/" data-dismiss="modal">« #{$.t('cart.continue_shop')}</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+    """
+    template    
 
   @queryString: (item) ->
     queryString = ''

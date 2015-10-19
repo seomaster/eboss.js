@@ -100,3 +100,6 @@ class @CartHelper
     $("div#subtotal").hide()
     $("#no-more-tables").empty()
     $("#no-more-tables").html(CartTemplates.emptyCart())
+
+  @alertCartItems: () ->
+    $("#cart-items").effect('shake')

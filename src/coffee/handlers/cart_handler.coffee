@@ -9,6 +9,11 @@ class @CartHandler
       e.preventDefault()
       CartController.showCart()
 
+  clickOnEditCart: ->
+    $('#edit-cart').on 'click', (e) ->
+      e.preventDefault()
+      CartController.showEditCart()
+
   clickOnAddToCart: ->
     $('#buy-button').on 'click', (e) ->
       e.preventDefault()
@@ -48,16 +53,21 @@ class @CartHandler
         $(e.target).val(e.target.defaultValue)
       else
         if quantity is 0
+          # Removing line item...
           if confirm $.t('cart.confirm_remove')
             CartController.removeCartItem(variationId)
             CartController.updateCartCounter()
           else
             $(e.target).val(e.target.defaultValue)
         else
-          CartController.updateVariationQuantityInCart(variationId, quantity)
-          CartHelper.updatePriceByQuantity(e.target, quantity)
-          CartHelper.updateSubTotal()
-          CartController.updateCartCounter()
+          # Adding line item...
+          if CartController.checkVariationAvailableInStock(variationId, quantity)
+            CartController.updateVariationQuantityInCart(variationId, quantity)
+            CartHelper.updatePriceByQuantity(e.target, quantity)
+            CartHelper.updateSubTotal()
+            CartController.updateCartCounter()
+          else
+            $(e.target).val(e.target.defaultValue)
 
   onClickMinus: -> 
     $("input[type='button'][class='less']").on 'click', (e) ->
@@ -77,15 +87,20 @@ class @CartHandler
     $("input[type='button'][class='more']").on 'click', (e) ->
       variationId = $(e.target).siblings("input[type='hidden']").val()
       quantity = $(e.target).siblings("input[type='text']").val()
-      CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1)
-      CartHelper.plusOneItemInCart(e.target)
-      CartHelper.updateSubTotal()
-      CartController.updateCartCounter()
+      if CartController.checkVariationAvailableInStock(variationId, parseInt(quantity) + 1)
+        CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1)
+        CartHelper.plusOneItemInCart(e.target)
+        CartHelper.updateSubTotal()
+        CartController.updateCartCounter()
   
   onChangeTable: ->
     $("#product-grid").bind "DOMSubtreeModified", (e) ->
       if $("#product-grid>tbody>tr").length is 0
         CartHelper.emptyCartPage()
+
+  onCheckoutDocumentReady: ->
+    $(window).bind 'load', ->      
+      CartController.checkCartItemsInStock()
 
   onDocumentReady: ->
     $(window).bind 'load', ->

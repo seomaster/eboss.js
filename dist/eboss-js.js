@@ -387,6 +387,12 @@
       return template;
     };
 
+    CartTemplates.editCartItems = function(line_items) {
+      var template;
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>\n      </div>\n      <div class='modal-body'>\n        " + (CartTemplates.cartItems(line_items)) + "\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + ($.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
+      return template;
+    };
+
     CartTemplates.cartItems = function(line_items) {
       var attributes, i, item, j, len, len1, option, ref, template, variation, variation_tmp;
       variation_tmp = '';
@@ -406,6 +412,18 @@
         }
       }
       template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + ($.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        <a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + ($.t('cart.finish_buy')) + " »</a>    \n      </div>\n    </div>\n  <div>\n</div>";
+      return template;
+    };
+
+    CartTemplates.unavailableVariation = function(variation) {
+      var template;
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Quantidade indisponível em estoque</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">A quantidade selecionada para o produto " + variation.product_name + " está indisponível no estoque</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + ($.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      return template;
+    };
+
+    CartTemplates.reviewCartItems = function() {
+      var template;
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">Algum produto em seu carrinho de compras está com a quantidade em estoque indisponível.</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + ($.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
@@ -572,6 +590,10 @@
       $("div#subtotal").hide();
       $("#no-more-tables").empty();
       return $("#no-more-tables").html(CartTemplates.emptyCart());
+    };
+
+    CartHelper.alertCartItems = function() {
+      return $("#cart-items").effect('shake');
     };
 
     return CartHelper;
@@ -743,6 +765,35 @@
       });
     };
 
+    CartController.showEditCart = function() {
+      var data, token, url;
+      token = $("input[type='hidden'][name='authenticity_token']").val();
+      if (!token) {
+        token = $("meta[name='csrf-token']").attr('content');
+      }
+      data = {
+        authenticity_token: token
+      };
+      url = '/cart.json';
+      return $.ajax(url, {
+        dataType: 'json',
+        method: 'get',
+        async: true,
+        data: data,
+        success: function(response, status, jqXHR) {
+          var cart;
+          CartHelper.openCartModal(CartTemplates.editCartItems(response.line_items));
+          cart = new CartHandler();
+          cart.clickOnRemoveCartItem();
+          cart.onScrollCart();
+          cart.onlyNumbers();
+          cart.onChangeQuantity();
+          cart.onClickMinus();
+          return cart.onClickPlus();
+        }
+      });
+    };
+
     CartController.updateCartCounter = function() {
       var data, form, url;
       form = $("form[id='add_to_cart']");
@@ -806,6 +857,67 @@
         data: $.param(data),
         success: function(response, status, jqXHR) {
           return $("div.panel div.loading").toggleClass('overlay');
+        }
+      });
+    };
+
+    CartController.checkVariationAvailableInStock = function(variation_id, quantity) {
+      var available, data, token, url;
+      available = true;
+      token = $("input[type='hidden'][name='authenticity_token']").val();
+      if (!token) {
+        token = $("meta[name='csrf-token']").attr('content');
+      }
+      data = {
+        authenticity_token: token,
+        variation: variation_id,
+        quantity: quantity
+      };
+      $("div.panel div.loading").toggleClass('overlay');
+      url = "/variation.json";
+      $.ajax(url, {
+        dataType: 'json',
+        method: 'get',
+        async: false,
+        data: $.param(data),
+        success: function(response, status, jqXHR) {
+          if (response.qty_in_stock < quantity) {
+            CartHelper.openCartModal(CartTemplates.unavailableVariation(response));
+            available = false;
+          }
+        },
+        ccmplete: function(jqXHR, status) {
+          $("div.panel div.loading").toggleClass('overlay');
+        }
+      });
+      return available;
+    };
+
+    CartController.checkCartItemsInStock = function() {
+      var data, token, url;
+      token = $("input[type='hidden'][name='authenticity_token']").val();
+      if (!token) {
+        token = $("meta[name='csrf-token']").attr('content');
+      }
+      data = {
+        authenticity_token: token
+      };
+      url = '/cart.json';
+      return $.ajax(url, {
+        dataType: 'json',
+        method: 'get',
+        async: true,
+        data: data,
+        success: function(response, status, jqXHR) {
+          var isNotAvailable;
+          isNotAvailable = function(line_item) {
+            return line_item.qty > line_item.variation.qty_in_stock;
+          };
+          if (_.any(response.line_items, isNotAvailable)) {
+            return $(CartTemplates.reviewCartItems()).modal().on('hidden.bs.modal', function() {
+              return CartHelper.alertCartItems();
+            });
+          }
         }
       });
     };
@@ -907,6 +1019,13 @@
       });
     };
 
+    CartHandler.prototype.clickOnEditCart = function() {
+      return $('#edit-cart').on('click', function(e) {
+        e.preventDefault();
+        return CartController.showEditCart();
+      });
+    };
+
     CartHandler.prototype.clickOnAddToCart = function() {
       return $('#buy-button').on('click', function(e) {
         e.preventDefault();
@@ -968,10 +1087,14 @@
               return $(e.target).val(e.target.defaultValue);
             }
           } else {
-            CartController.updateVariationQuantityInCart(variationId, quantity);
-            CartHelper.updatePriceByQuantity(e.target, quantity);
-            CartHelper.updateSubTotal();
-            return CartController.updateCartCounter();
+            if (CartController.checkVariationAvailableInStock(variationId, quantity)) {
+              CartController.updateVariationQuantityInCart(variationId, quantity);
+              CartHelper.updatePriceByQuantity(e.target, quantity);
+              CartHelper.updateSubTotal();
+              return CartController.updateCartCounter();
+            } else {
+              return $(e.target).val(e.target.defaultValue);
+            }
           }
         }
       });
@@ -1001,10 +1124,12 @@
         var quantity, variationId;
         variationId = $(e.target).siblings("input[type='hidden']").val();
         quantity = $(e.target).siblings("input[type='text']").val();
-        CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1);
-        CartHelper.plusOneItemInCart(e.target);
-        CartHelper.updateSubTotal();
-        return CartController.updateCartCounter();
+        if (CartController.checkVariationAvailableInStock(variationId, parseInt(quantity) + 1)) {
+          CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1);
+          CartHelper.plusOneItemInCart(e.target);
+          CartHelper.updateSubTotal();
+          return CartController.updateCartCounter();
+        }
       });
     };
 
@@ -1013,6 +1138,12 @@
         if ($("#product-grid>tbody>tr").length === 0) {
           return CartHelper.emptyCartPage();
         }
+      });
+    };
+
+    CartHandler.prototype.onCheckoutDocumentReady = function() {
+      return $(window).bind('load', function() {
+        return CartController.checkCartItemsInStock();
       });
     };
 
@@ -1105,6 +1236,19 @@
     }
 
     return EbossCartPage;
+
+  })();
+
+  this.EbossCartCheckout = (function() {
+    function EbossCartCheckout() {
+      var cart;
+      new I18n();
+      cart = new CartHandler();
+      cart.onCheckoutDocumentReady();
+      cart.clickOnEditCart();
+    }
+
+    return EbossCartCheckout;
 
   })();
 

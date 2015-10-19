@@ -18,3 +18,12 @@ class @EbossCartPage
     cart.onClickPlus()
     cart.onChangeQuantity()
     cart.onChangeTable()
+
+# Cart for checkout's page
+class @EbossCartCheckout
+  constructor: () ->
+    new I18n()
+    cart = new CartHandler()
+    cart.onCheckoutDocumentReady()
+    cart.clickOnEditCart()
+    
