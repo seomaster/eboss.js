@@ -110,7 +110,8 @@ class @CartController
         $("div.panel div.loading").toggleClass('overlay')
 
   @checkVariationAvailableInStock: (variation_id, quantity) ->
-    available = true
+    stockStatus = 
+      available : true
     token = $("input[type='hidden'][name='authenticity_token']").val()
     if not token
       token = $("meta[name='csrf-token']").attr('content') 
@@ -126,22 +127,17 @@ class @CartController
       async: false
       data: $.param(data)
       success: (response, status, jqXHR) ->
-        # Verificar disponibilidade em estoque 
-        # Caso não esteja mais disponível mostrar a modal
-        # com a mensagem de indisponibilidade e ao fechar
-        # a modal atualizar o carrinho com a quantidade 
-        # máxima disponível.
         if response.qty_in_stock < quantity
           CartHelper.openCartModal(CartTemplates.unavailableVariation(response))
-          # Atualizar quantidades no carrinho.
-          available = false
+          stockStatus.available = false
+          stockStatus.maxQtyAvailable = response.qty_in_stock
           return
       ccmplete:(jqXHR, status ) ->
         $("div.panel div.loading").toggleClass('overlay')
         return
-    return available
+    return stockStatus
 
-  checkCartItemsInStock: ->
+  @checkCartItemsInStock: ->
     token = $("input[type='hidden'][name='authenticity_token']").val()
     if not token
       token = $("meta[name='csrf-token']").attr('content')
@@ -159,3 +155,19 @@ class @CartController
         if(_.any(response.line_items, isNotAvailable))
           $(CartTemplates.reviewCartItems()).modal().on 'hidden.bs.modal', ->
             CartHelper.alertCartItems()
+
+  @updateSummaryCart: ->
+    token = $("input[type='hidden'][name='authenticity_token']").val()
+    if not token
+      token = $("meta[name='csrf-token']").attr('content')
+    data = 
+      authenticity_token : token
+    url = '/update_summary_cart.json'
+
+    $.ajax url,
+      dataType: 'script'
+      method: 'post'
+      async: true
+      data: data
+      success: (response, status, jqXHR) ->
+        CartHelper.alertCartItems()

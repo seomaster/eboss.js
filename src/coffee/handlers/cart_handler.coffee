@@ -61,13 +61,17 @@ class @CartHandler
             $(e.target).val(e.target.defaultValue)
         else
           # Adding line item...
-          if CartController.checkVariationAvailableInStock(variationId, quantity)
+          stock = CartController.checkVariationAvailableInStock(variationId, quantity)
+          if stock.available
             CartController.updateVariationQuantityInCart(variationId, quantity)
             CartHelper.updatePriceByQuantity(e.target, quantity)
             CartHelper.updateSubTotal()
             CartController.updateCartCounter()
           else
-            $(e.target).val(e.target.defaultValue)
+            CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable)
+            CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable)
+            CartHelper.updateSubTotal()
+            CartController.updateCartCounter()
 
   onClickMinus: -> 
     $("input[type='button'][class='less']").on 'click', (e) ->
@@ -87,9 +91,15 @@ class @CartHandler
     $("input[type='button'][class='more']").on 'click', (e) ->
       variationId = $(e.target).siblings("input[type='hidden']").val()
       quantity = $(e.target).siblings("input[type='text']").val()
-      if CartController.checkVariationAvailableInStock(variationId, parseInt(quantity) + 1)
+      stock = CartController.checkVariationAvailableInStock(variationId, parseInt(quantity) + 1)
+      if stock.available
         CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1)
         CartHelper.plusOneItemInCart(e.target)
+        CartHelper.updateSubTotal()
+        CartController.updateCartCounter()
+      else
+        CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable)
+        CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable)
         CartHelper.updateSubTotal()
         CartController.updateCartCounter()
   
@@ -101,6 +111,7 @@ class @CartHandler
   onCheckoutDocumentReady: ->
     $(window).bind 'load', ->      
       CartController.checkCartItemsInStock()
+      CartController.updateSummaryCart()
 
   onDocumentReady: ->
     $(window).bind 'load', ->

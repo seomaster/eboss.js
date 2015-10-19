@@ -93,6 +93,7 @@ class @CartHelper
       $(item).remove()
       if $("div#cart-content div.panel-body").children().length is 0
         $("div#cart-content div.panel-body").html CartTemplates.emptyCart()
+        $("div#cart-content div.panel-footer #checkout-button").remove()
       CartHelper.updateSubTotal()
 
   @emptyCartPage: () ->

@@ -383,18 +383,18 @@
         option = ref[i];
         attributes = attributes + ("<li>" + (_.keys(option)[0]) + ": " + (_.values(option)[0]) + "</li>");
       }
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + ($.t('cart.line_item_added')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"thumb col-xs-3\">\n            <img src='" + variation.thumb_url + "' class=\"img-responsive\">   \n          </div>\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">" + variation.product_name + "</h5>\n            <div class=\"price-now\">" + (MoneyHelper.currency(variation.sale_price)) + "</div>\n            <div class=\"price-old\">" + (MoneyHelper.currency(variation.regular_price)) + "</div>\n            <ul class=\"attributes\">\n              " + attributes + "\n            </ul>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9 col-xs-offset-3\">\n            <a href=\"/checkout\" class=\"btn btn-primary checkout\">" + ($.t('cart.finish_buy')) + " »</a>\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + ($.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.line_item_added')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"thumb col-xs-3\">\n            <img src='" + variation.thumb_url + "' class=\"img-responsive\">   \n          </div>\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">" + variation.product_name + "</h5>\n            <div class=\"price-now\">" + (MoneyHelper.currency(variation.sale_price)) + "</div>\n            <div class=\"price-old\">" + (MoneyHelper.currency(variation.regular_price)) + "</div>\n            <ul class=\"attributes\">\n              " + attributes + "\n            </ul>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9 col-xs-offset-3\">\n            <a href=\"/checkout\" class=\"btn btn-primary checkout\">" + (i18n.t('cart.finish_buy')) + " »</a>\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
     CartTemplates.editCartItems = function(line_items) {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>\n      </div>\n      <div class='modal-body'>\n        " + (CartTemplates.cartItems(line_items)) + "\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + ($.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>\n      </div>\n      <div class='modal-body'>\n        " + (CartTemplates.cartItems(line_items)) + "\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
       return template;
     };
 
     CartTemplates.cartItems = function(line_items) {
-      var attributes, i, item, j, len, len1, option, ref, template, variation, variation_tmp;
+      var attributes, checkout_button, i, item, j, len, len1, option, ref, template, variation, variation_tmp;
       variation_tmp = '';
       if (line_items.length === 0) {
         variation_tmp = this.emptyCart();
@@ -408,22 +408,27 @@
             option = ref[j];
             attributes = attributes + ("<li>" + (_.keys(option)[0].trim()) + ": " + (_.values(option)[0].trim()) + "</li>");
           }
-          variation_tmp = variation_tmp + (variation_tmp = " <div class='item'>\n  <div class='thumb col-xs-3'>\n    <img src='" + variation.thumb_url + "' alt='" + variation.product_name + "'>\n    <span class='remove-item'><a href='#' data-variation-id='" + variation.id + "'><span class='remove'>" + ($.t('cart.remove')) + "</span></a></span>\n  </div>\n  <div class='details col-xs-9'>\n    <h5 class='title'><a href=\"" + variation.permalink + "?" + (this.queryString(item)) + "\">" + variation.product_name + "</a></h5>\n    <ul class='attributes'>\n      " + attributes + "\n    </ul>\n    <div class='quantity-price'>                    \n      <div class='how-many'>\n        <input type='button' class='less' value='-'>\n        <input type=\"text\"   class=\"qty\" id=\"variation_qty_" + variation.id + "\" name=\"name\" value=\"" + item.qty + "\" maxlength=\"2\" />\n        <input type=\"button\" class=\"more\" value=\"+\" >\n        <input type=\"hidden\" name=\"variation_id\" value=\"" + variation.id + "\" />\n      </div>\n      <div class='price'>\n        <div class='amount'>\n          <p class='current-price'><span class=\"x\">x </span>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n          <p class='old-price'>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        </div>\n      </div>\n    </div>\n    <a href=\"javascript:void(0)\" class=\"item_update_qty\"><i class=\"fa fa-refresh\"></i> " + ($.t('cart.update')) + "</a>\n    <div class='total-price'>\n      <p class='current-price'>" + (MoneyHelper.currency(item.qty * variation.sale_price)) + "</p>\n      <p class='old-price'>" + (MoneyHelper.currency(item.qty * variation.regular_price)) + "</p>\n    </div>\n  </div>\n</div>");
+          variation_tmp = variation_tmp + (variation_tmp = " <div class='item'>\n  <div class='thumb col-xs-3'>\n    <img src='" + variation.thumb_url + "' alt='" + variation.product_name + "'>\n    <span class='remove-item'><a href='#' data-variation-id='" + variation.id + "'><span class='remove'>" + (i18n.t('cart.remove')) + "</span></a></span>\n  </div>\n  <div class='details col-xs-9'>\n    <h5 class='title'><a href=\"" + variation.permalink + "?" + (this.queryString(item)) + "\">" + variation.product_name + "</a></h5>\n    <ul class='attributes'>\n      " + attributes + "\n    </ul>\n    <div class='quantity-price'>                    \n      <div class='how-many'>\n        <input type='button' class='less' value='-'>\n        <input type=\"text\"   class=\"qty\" id=\"variation_qty_" + variation.id + "\" name=\"name\" value=\"" + item.qty + "\" maxlength=\"2\" />\n        <input type=\"button\" class=\"more\" value=\"+\" >\n        <input type=\"hidden\" name=\"variation_id\" value=\"" + variation.id + "\" />\n      </div>\n      <div class='price'>\n        <div class='amount'>\n          <p class='current-price'><span class=\"x\">x </span>" + (MoneyHelper.currency(variation.sale_price)) + "</p>\n          <p class='old-price'>" + (MoneyHelper.currency(variation.regular_price)) + "</p>\n        </div>\n      </div>\n    </div>\n    <a href=\"javascript:void(0)\" class=\"item_update_qty\"><i class=\"fa fa-refresh\"></i> " + (i18n.t('cart.update')) + "</a>\n    <div class='total-price'>\n      <p class='current-price'>" + (MoneyHelper.currency(item.qty * variation.sale_price)) + "</p>\n      <p class='old-price'>" + (MoneyHelper.currency(item.qty * variation.regular_price)) + "</p>\n    </div>\n  </div>\n</div>");
         }
       }
-      template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + ($.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        <a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + ($.t('cart.finish_buy')) + " »</a>    \n      </div>\n    </div>\n  <div>\n</div>";
+      if (line_items.length === 0) {
+        checkout_button = '';
+      } else {
+        checkout_button = "<a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + (i18n.t('cart.finish_buy')) + " »</a>";
+      }
+      template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + (i18n.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        " + checkout_button + "\n      </div>\n    </div>\n  <div>\n</div>";
       return template;
     };
 
     CartTemplates.unavailableVariation = function(variation) {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Quantidade indisponível em estoque</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">A quantidade selecionada para o produto " + variation.product_name + " está indisponível no estoque</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + ($.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Quantidade indisponível em estoque</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">A quantidade selecionada para o produto " + variation.product_name + " está indisponível no estoque</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
     CartTemplates.reviewCartItems = function() {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">Algum produto em seu carrinho de compras está com a quantidade em estoque indisponível.</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + ($.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">Algum produto em seu carrinho de compras está com a quantidade em estoque indisponível.</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
@@ -443,7 +448,7 @@
 
     CartTemplates.emptyCart = function() {
       var empty;
-      return empty = "<div class=\"empty-cart\">\n  <div>" + ($.t('cart.empty_cart')) + "</div>\n</div>";
+      return empty = "<div class=\"empty-cart\">\n  <div>" + (i18n.t('cart.empty_cart')) + "</div>\n</div>";
     };
 
     return CartTemplates;
@@ -580,6 +585,7 @@
         $(item).remove();
         if ($("div#cart-content div.panel-body").children().length === 0) {
           $("div#cart-content div.panel-body").html(CartTemplates.emptyCart());
+          $("div#cart-content div.panel-footer #checkout-button").remove();
         }
         return CartHelper.updateSubTotal();
       });
@@ -862,8 +868,10 @@
     };
 
     CartController.checkVariationAvailableInStock = function(variation_id, quantity) {
-      var available, data, token, url;
-      available = true;
+      var data, stockStatus, token, url;
+      stockStatus = {
+        available: true
+      };
       token = $("input[type='hidden'][name='authenticity_token']").val();
       if (!token) {
         token = $("meta[name='csrf-token']").attr('content');
@@ -883,14 +891,15 @@
         success: function(response, status, jqXHR) {
           if (response.qty_in_stock < quantity) {
             CartHelper.openCartModal(CartTemplates.unavailableVariation(response));
-            available = false;
+            stockStatus.available = false;
+            stockStatus.maxQtyAvailable = response.qty_in_stock;
           }
         },
         ccmplete: function(jqXHR, status) {
           $("div.panel div.loading").toggleClass('overlay');
         }
       });
-      return available;
+      return stockStatus;
     };
 
     CartController.checkCartItemsInStock = function() {
@@ -918,6 +927,27 @@
               return CartHelper.alertCartItems();
             });
           }
+        }
+      });
+    };
+
+    CartController.updateSummaryCart = function() {
+      var data, token, url;
+      token = $("input[type='hidden'][name='authenticity_token']").val();
+      if (!token) {
+        token = $("meta[name='csrf-token']").attr('content');
+      }
+      data = {
+        authenticity_token: token
+      };
+      url = '/update_summary_cart.json';
+      return $.ajax(url, {
+        dataType: 'script',
+        method: 'post',
+        async: true,
+        data: data,
+        success: function(response, status, jqXHR) {
+          return CartHelper.alertCartItems();
         }
       });
     };
@@ -1073,7 +1103,7 @@
 
     CartHandler.prototype.onChangeQuantity = function() {
       return $("input[type='text'][class='qty']").on('change', function(e) {
-        var quantity, variationId;
+        var quantity, stock, variationId;
         variationId = $(e.target).siblings("input[type='hidden']").val();
         quantity = parseInt($(e.target).val());
         if (_.isNaN(quantity)) {
@@ -1087,13 +1117,17 @@
               return $(e.target).val(e.target.defaultValue);
             }
           } else {
-            if (CartController.checkVariationAvailableInStock(variationId, quantity)) {
+            stock = CartController.checkVariationAvailableInStock(variationId, quantity);
+            if (stock.available) {
               CartController.updateVariationQuantityInCart(variationId, quantity);
               CartHelper.updatePriceByQuantity(e.target, quantity);
               CartHelper.updateSubTotal();
               return CartController.updateCartCounter();
             } else {
-              return $(e.target).val(e.target.defaultValue);
+              CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable);
+              CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable);
+              CartHelper.updateSubTotal();
+              return CartController.updateCartCounter();
             }
           }
         }
@@ -1121,12 +1155,18 @@
 
     CartHandler.prototype.onClickPlus = function() {
       return $("input[type='button'][class='more']").on('click', function(e) {
-        var quantity, variationId;
+        var quantity, stock, variationId;
         variationId = $(e.target).siblings("input[type='hidden']").val();
         quantity = $(e.target).siblings("input[type='text']").val();
-        if (CartController.checkVariationAvailableInStock(variationId, parseInt(quantity) + 1)) {
+        stock = CartController.checkVariationAvailableInStock(variationId, parseInt(quantity) + 1);
+        if (stock.available) {
           CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1);
           CartHelper.plusOneItemInCart(e.target);
+          CartHelper.updateSubTotal();
+          return CartController.updateCartCounter();
+        } else {
+          CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable);
+          CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable);
           CartHelper.updateSubTotal();
           return CartController.updateCartCounter();
         }
@@ -1143,7 +1183,8 @@
 
     CartHandler.prototype.onCheckoutDocumentReady = function() {
       return $(window).bind('load', function() {
-        return CartController.checkCartItemsInStock();
+        CartController.checkCartItemsInStock();
+        return CartController.updateSummaryCart();
       });
     };
 
