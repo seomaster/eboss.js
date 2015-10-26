@@ -32,7 +32,7 @@ class @CartHandler
     $("span.remove-item a").on 'click', (e) ->
       e.preventDefault()
       e.stopPropagation()
-      if confirm($.t('cart.confirm_remove'))
+      if confirm(i18n.t('cart.confirm_remove'))
         variationId = $(e.target).parent().data('variationId')
         CartController.removeCartItem(variationId)
         CartController.updateCartCounter()
@@ -105,7 +105,6 @@ class @CartHandler
         CartHelper.plusOneItemInCart(e.target)
         CartHelper.updateSubTotal()
         CartController.updateCartCounter()
-        $("div.panel div.loading").toggleClass('overlay')
       else
         CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable)
         CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable)

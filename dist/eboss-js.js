@@ -1209,7 +1209,7 @@
         var variationId;
         e.preventDefault();
         e.stopPropagation();
-        if (confirm($.t('cart.confirm_remove'))) {
+        if (confirm(i18n.t('cart.confirm_remove'))) {
           variationId = $(e.target).parent().data('variationId');
           CartController.removeCartItem(variationId);
           return CartController.updateCartCounter();
@@ -1303,8 +1303,7 @@
           CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1);
           CartHelper.plusOneItemInCart(e.target);
           CartHelper.updateSubTotal();
-          CartController.updateCartCounter();
-          return $("div.panel div.loading").toggleClass('overlay');
+          return CartController.updateCartCounter();
         } else {
           CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable);
           CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable);
