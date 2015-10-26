@@ -10,9 +10,10 @@ class @CartHandler
       CartController.showCart()
   
   clickResponsiveCartOnCheckout: ->
-    $(document).on 'click', '.close-show-cart', (e) ->
-      $(document).off 'click', '.close-show-cart'
-      CartController.showEditCart()
+    if not CartHelper.clickAlreadyAttached('.close-show-cart')
+      $(document).on 'click', '.close-show-cart', (e) ->
+        $(document).off 'click', '.close-show-cart'
+        CartController.showEditCart()
   
   clickOnEditCart: ->
     $('#edit-cart').on 'click', (e) ->

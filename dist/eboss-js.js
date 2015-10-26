@@ -339,7 +339,7 @@
               unavailable: 'indisponível',
               buy: 'adicionar ao carrinho',
               set_amount: 'Ajuste as quantidades dos produtos.',
-              save: 'Salvar carrinho',
+              close: 'Fechar',
               warning_quantity_unavailable: 'Aviso: Quantidade indisponível em estoque',
               product_qty_unavailable: 'A quantidade selecionada para o produto __product__ está indisponível no estoque.',
               warning_review_cart: 'Aviso: Revise o seu carrinho de compras',
@@ -369,7 +369,7 @@
               buy: 'add to cart',
               unavailable: 'not available',
               set_amount: 'Ajuste as quantidades dos produtos.',
-              save: 'Save',
+              close: 'Fechar',
               warning_quantity_unavailable: 'Note: that amount is not available in our stock.',
               product_qty_unavailable: 'The desired amount for __product__ is not available at the moment.',
               warning_review_cart: 'Note: please review your shopping cart.',
@@ -433,7 +433,7 @@
         if ($("div.checkout-container").length === 0) {
           checkout_button = "<a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + (i18n.t('cart.finish_buy')) + " »</a>";
         } else {
-          checkout_button = "<a href=\"/checkout\" class=\"btn btn-primary\">" + (i18n.t('cart.save')) + "</a>";
+          checkout_button = "<a href=\"/checkout\" class=\"btn btn-primary\">" + (i18n.t('cart.close')) + "</a>";
         }
       }
       template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + (i18n.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        " + checkout_button + "\n      </div>\n    </div>\n  <div>\n</div>";
@@ -442,7 +442,7 @@
 
     CartTemplates.unavailableVariation = function(variation) {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_quantity_unavailable')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">" + (i18n.t('cart.product_qty_unavailable', {
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_quantity_unavailable')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-12\">\n            <h5 class=\"title\">" + (i18n.t('cart.product_qty_unavailable', {
         product: variation.product_name
       })) + "</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
@@ -458,7 +458,7 @@
 
     CartTemplates.reviewCartItems = function(options) {
       var template;
-      template = "<div class='modal-header'>\n  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n  <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_review_cart')) + "</h4>\n</div>\n<div class='modal-body'>\n  <div class=\"row\">\n    <div class=\"details col-xs-9\">";
+      template = "<div class='modal-header'>\n  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n  <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_review_cart')) + "</h4>\n</div>\n<div class='modal-body'>\n  <div class=\"row\">\n    <div class=\"details col-xs-12\">";
       if (options.unavailable) {
         template += "\"<h5 class=\"title\">" + (i18n.t('cart.product_unavailable')) + "</h5>";
       } else {
@@ -707,6 +707,15 @@
 
     CartHelper.alertCartItems = function() {
       return $("#cart-items").effect('shake');
+    };
+
+    CartHelper.clickAlreadyAttached = function(selector) {
+      var ev, isResponsiveLink;
+      ev = $._data(document, 'events');
+      isResponsiveLink = function(elem) {
+        return elem.selector === selector;
+      };
+      return _.any(ev.click, isResponsiveLink);
     };
 
     return CartHelper;
@@ -1170,10 +1179,12 @@
     };
 
     CartHandler.prototype.clickResponsiveCartOnCheckout = function() {
-      return $(document).on('click', '.close-show-cart', function(e) {
-        $(document).off('click', '.close-show-cart');
-        return CartController.showEditCart();
-      });
+      if (!CartHelper.clickAlreadyAttached('.close-show-cart')) {
+        return $(document).on('click', '.close-show-cart', function(e) {
+          $(document).off('click', '.close-show-cart');
+          return CartController.showEditCart();
+        });
+      }
     };
 
     CartHandler.prototype.clickOnEditCart = function() {

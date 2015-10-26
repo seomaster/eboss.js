@@ -108,7 +108,7 @@ class @CartTemplates
       if $("div.checkout-container").length is 0
         checkout_button = """<a href="/checkout" id="checkout-button" class="btn btn-primary">#{i18n.t('cart.finish_buy')} »</a>"""
       else
-        checkout_button = """<a href="/checkout" class="btn btn-primary">#{i18n.t('cart.save')}</a>"""
+        checkout_button = """<a href="/checkout" class="btn btn-primary">#{i18n.t('cart.close')}</a>"""
 
     template = """
     <div class="panel panel-default">
@@ -145,7 +145,7 @@ class @CartTemplates
           </div>
           <div class='modal-body'>
             <div class="row">
-              <div class="details col-xs-9">
+              <div class="details col-xs-12">
                 <h5 class="title">#{i18n.t('cart.product_qty_unavailable', {product: variation.product_name})}</h5>
               </div>
             </div>
@@ -199,7 +199,7 @@ class @CartTemplates
         </div>
         <div class='modal-body'>
           <div class="row">
-            <div class="details col-xs-9">
+            <div class="details col-xs-12">
     """
     if options.unavailable
       template+=""""<h5 class="title">#{i18n.t('cart.product_unavailable')}</h5>"""

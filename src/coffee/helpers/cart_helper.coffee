@@ -140,3 +140,8 @@ class @CartHelper
 
   @alertCartItems: () ->
     $("#cart-items").effect('shake')
+  
+  @clickAlreadyAttached: (selector) ->
+    ev = $._data(document, 'events')
+    isResponsiveLink = (elem) -> elem.selector is selector
+    _.any(ev.click, isResponsiveLink )
