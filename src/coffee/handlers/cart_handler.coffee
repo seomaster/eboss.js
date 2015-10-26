@@ -8,9 +8,16 @@ class @CartHandler
     $('#shopping-cart').children().on 'click', (e) ->
       e.preventDefault()
       CartController.showCart()
-
+  
+  clickResponsiveCartOnCheckout: ->
+    $(document).on 'click', '.close-show-cart', (e) ->
+      $(document).off 'click', '.close-show-cart'
+      CartController.showEditCart()
+  
   clickOnEditCart: ->
     $('#edit-cart').on 'click', (e) ->
+      $('#edit-cart').unbind('click')
+      $(this).attr('disabled', 'disabled')
       e.preventDefault()
       CartController.showEditCart()
 
@@ -97,6 +104,7 @@ class @CartHandler
         CartHelper.plusOneItemInCart(e.target)
         CartHelper.updateSubTotal()
         CartController.updateCartCounter()
+        $("div.panel div.loading").toggleClass('overlay')
       else
         CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable)
         CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable)
@@ -107,6 +115,12 @@ class @CartHandler
     $("#product-grid").bind "DOMSubtreeModified", (e) ->
       if $("#product-grid>tbody>tr").length is 0
         CartHelper.emptyCartPage()
+
+  onFinishCheckout: ->
+    $(document).on 'click', ".btn-make-payment", (e) ->
+      e.preventDefault()
+      e.stopPropagation()
+      console.log('Click')
 
   onCheckoutDocumentReady: ->
     $(window).bind 'load', ->      

@@ -24,6 +24,8 @@ class @EbossCartCheckout
   constructor: () ->
     new I18n()
     cart = new CartHandler()
+    cart.clickResponsiveCartOnCheckout()
     cart.onCheckoutDocumentReady()
+    cart.onFinishCheckout()
     cart.clickOnEditCart()
     

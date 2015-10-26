@@ -51,13 +51,26 @@ class @CartController
       data: data
       success: (response, status, jqXHR) ->
         CartHelper.openCartModal(CartTemplates.editCartItems(response.line_items))
-        cart = new CartHandler()
-        cart.clickOnRemoveCartItem()
-        cart.onScrollCart()
-        cart.onlyNumbers()
-        cart.onChangeQuantity()
-        cart.onClickMinus()
-        cart.onClickPlus()
+          .on('shown.bs.modal', ->
+            CartHelper.updateSubTotal() 
+            cart = new CartHandler()
+            cart.clickOnRemoveCartItem()
+            cart.onScrollCart()
+            cart.onlyNumbers()
+            cart.onChangeQuantity()
+            cart.onClickMinus()
+            cart.onClickPlus()
+          )
+          .on('hide.bs.modal',  ->
+            CartController.updateSummaryCart()
+          )
+          .on('hidden.bs.modal', ->
+            CartHelper.alertCartItems()
+            $("#shopping_cart_modal").remove()
+            $("#edit-cart").removeAttr('disabled')
+            handler = new CartHandler()
+            handler.clickResponsiveCartOnCheckout()
+          )
 
   @updateCartCounter: ->
     form = $("form[id='add_to_cart']")
@@ -127,17 +140,18 @@ class @CartController
       async: false
       data: $.param(data)
       success: (response, status, jqXHR) ->
-        if response.qty_in_stock < quantity
+        if not response.is_virtual and response.qty_in_stock < quantity
           CartHelper.openCartModal(CartTemplates.unavailableVariation(response))
           stockStatus.available = false
           stockStatus.maxQtyAvailable = response.qty_in_stock
           return
-      ccmplete:(jqXHR, status ) ->
+      complete:(jqXHR, status ) ->
         $("div.panel div.loading").toggleClass('overlay')
         return
     return stockStatus
 
-  @checkCartItemsInStock: ->
+  @checkCartItemsInStock: (options) ->
+    needReviewCart = false
     token = $("input[type='hidden'][name='authenticity_token']").val()
     if not token
       token = $("meta[name='csrf-token']").attr('content')
@@ -148,13 +162,15 @@ class @CartController
     $.ajax url,
       dataType: 'json'
       method: 'get'
-      async: true
+      async: false
       data: data
       success: (response, status, jqXHR) ->
-        isNotAvailable = (line_item) -> line_item.qty > line_item.variation.qty_in_stock
-        if(_.any(response.line_items, isNotAvailable))
-          $(CartTemplates.reviewCartItems()).modal().on 'hidden.bs.modal', ->
-            CartHelper.alertCartItems()
+        line_items = response.line_items
+        if CartHelper.anyLineItemNotAvailable(line_items, options)
+          needReviewCart = true
+        else if CartHelper.anyLineItemLowStock(line_items, options)
+          needReviewCart = true
+    needReviewCart
 
   @updateSummaryCart: ->
     token = $("input[type='hidden'][name='authenticity_token']").val()
@@ -170,4 +186,5 @@ class @CartController
       async: true
       data: data
       success: (response, status, jqXHR) ->
-        CartHelper.alertCartItems()
+          handler = new CartHandler()
+          handler.clickOnEditCart()

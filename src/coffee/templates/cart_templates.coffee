@@ -49,11 +49,6 @@ class @CartTemplates
           </div>
           <div class='modal-body'>
             #{CartTemplates.cartItems(line_items)}    
-            <div class="row action-next">
-              <div class="col-xs-9">
-                <div class="keep-shopping"><a href="/" data-dismiss="modal">« #{i18n.t('cart.continue_shop')}</a></div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -107,10 +102,14 @@ class @CartTemplates
           </div>
         </div>
         """
-    if line_items.length is  0
+    if line_items.length is 0
       checkout_button = ''
     else
-      checkout_button = """<a href="/checkout" id="checkout-button" class="btn btn-primary">#{i18n.t('cart.finish_buy')} »</a>"""
+      if $("div.checkout-container").length is 0
+        checkout_button = """<a href="/checkout" id="checkout-button" class="btn btn-primary">#{i18n.t('cart.finish_buy')} »</a>"""
+      else
+        checkout_button = """<a href="/checkout" class="btn btn-primary">Salvar carrinho</a>"""
+
     template = """
     <div class="panel panel-default">
       <div class="loading"></div>
@@ -162,30 +161,52 @@ class @CartTemplates
     """
     template
 
-  @reviewCartItems: ->
+  @alertModal: (template) ->
     template = """
     <div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>
       <div class='modal-dialog' role='document'>
         <div class='modal-content'>
-          <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-            <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>
-          </div>
-          <div class='modal-body'>
-            <div class="row">
-              <div class="details col-xs-9">
-                <h5 class="title">Algum produto em seu carrinho de compras está com a quantidade em estoque indisponível.</h5>
-              </div>
-            </div>
-            <div class="row action-next">
-              <div class="col-xs-9">
-                <div class="keep-shopping"><a href="/" data-dismiss="modal">« #{i18n.t('cart.continue_shop')}</a></div>
-              </div>
+          #{template}
+          <div class="row action-next">
+            <div class="col-xs-9">
+              <div class="keep-shopping"><a href="/" data-dismiss="modal">« #{i18n.t('cart.continue_shop')}</a></div>
             </div>
           </div>
         </div>
       </div>
-    </div>  
+    </div>
+    """
+  @confirmModal: (template) ->
+    template = """
+    <div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>
+      <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+          #{template}
+          <div class="row action-next">
+            <div class="col-xs-9 col-xs-offset-3">
+                <a href="#" class="btn btn-primary" data-dismiss="modal">cancelar</a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  @reviewCartItems: (options) ->
+    template = """
+        <div class='modal-header'>
+          <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+          <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>
+        </div>
+        <div class='modal-body'>
+          <div class="row">
+            <div class="details col-xs-9">
+    """
+    if options.unavailable
+      template+=""""<h5 class="title">Produto com estoque zerado: Seu carrinho precisou ser atualizado, pois um ou mais produtos esgotaram e foram removidos.</h5>"""
+    else
+      template+=""""<h5 class="title">Produto com estoque alterado: Seu carrinho precisou ser atualizado, pois um ou mais produtos tiveram o estoque alterado.</h5>"""
+    template+="""</div>
+            </div>
     """
     template    
 

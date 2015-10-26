@@ -389,7 +389,7 @@
 
     CartTemplates.editCartItems = function(line_items) {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>\n      </div>\n      <div class='modal-body'>\n        " + (CartTemplates.cartItems(line_items)) + "\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>\n      </div>\n      <div class='modal-body'>\n        " + (CartTemplates.cartItems(line_items)) + "\n      </div>\n    </div>\n  </div>\n</div>";
       return template;
     };
 
@@ -414,7 +414,11 @@
       if (line_items.length === 0) {
         checkout_button = '';
       } else {
-        checkout_button = "<a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + (i18n.t('cart.finish_buy')) + " »</a>";
+        if ($("div.checkout-container").length === 0) {
+          checkout_button = "<a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + (i18n.t('cart.finish_buy')) + " »</a>";
+        } else {
+          checkout_button = "<a href=\"/checkout\" class=\"btn btn-primary\">Salvar carrinho</a>";
+        }
       }
       template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + (i18n.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        " + checkout_button + "\n      </div>\n    </div>\n  <div>\n</div>";
       return template;
@@ -426,9 +430,23 @@
       return template;
     };
 
-    CartTemplates.reviewCartItems = function() {
+    CartTemplates.alertModal = function(template) {
+      return template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      " + template + "\n      <div class=\"row action-next\">\n        <div class=\"col-xs-9\">\n          <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
+    };
+
+    CartTemplates.confirmModal = function(template) {
+      return template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      " + template + "\n      <div class=\"row action-next\">\n        <div class=\"col-xs-9 col-xs-offset-3\">\n            <a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">cancelar</a>\n          </div>\n      </div>\n    </div>\n  </div>\n</div>";
+    };
+
+    CartTemplates.reviewCartItems = function(options) {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">Algum produto em seu carrinho de compras está com a quantidade em estoque indisponível.</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      template = "<div class='modal-header'>\n  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n  <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>\n</div>\n<div class='modal-body'>\n  <div class=\"row\">\n    <div class=\"details col-xs-9\">";
+      if (options.unavailable) {
+        template += "\"<h5 class=\"title\">Produto com estoque zerado: Seu carrinho precisou ser atualizado, pois um ou mais produtos esgotaram e foram removidos.</h5>";
+      } else {
+        template += "\"<h5 class=\"title\">Produto com estoque alterado: Seu carrinho precisou ser atualizado, pois um ou mais produtos tiveram o estoque alterado.</h5>";
+      }
+      template += "</div>\n</div>";
       return template;
     };
 
@@ -538,13 +556,14 @@
     };
 
     CartHelper.updateSubTotal = function() {
-      this.calculateSubTotalFor($("#shopping-cart"));
-      return this.calculateSubTotalFor($("#shopping-cart-responsive"));
+      this.calculateSubTotalFor($("#shopping-cart~div#cart-content"));
+      this.calculateSubTotalFor($("#shopping-cart-responsive~div#cart-content"));
+      return this.calculateSubTotalFor($("#shopping_cart_modal").find("div.modal-body"));
     };
 
     CartHelper.calculateSubTotalFor = function(cart) {
       var cart_content, prices, sub_total, sum;
-      cart_content = $(cart).siblings("div#cart-content");
+      cart_content = $(cart);
       if (cart_content.length === 0) {
         cart_content = $(cart).find('#product-grid > tbody > tr');
       }
@@ -559,6 +578,52 @@
         sub_total = $(cart).find('div#subtotal > div.amount p');
       }
       return $(sub_total).text(MoneyHelper.currency(sum));
+    };
+
+    CartHelper.anyLineItemNotAvailable = function(line_items, options) {
+      var isNotAvailable;
+      if (options == null) {
+        options = {
+          confirm: false
+        };
+      }
+      isNotAvailable = function(line_item) {
+        return !line_item.variation.is_virtual && line_item.variation.qty_in_stock === 0;
+      };
+      if (_.any(line_items, isNotAvailable)) {
+        if (options.confirm) {
+          CartHelper.confirmReviewCart({
+            unavailable: true
+          });
+        } else {
+          CartHelper.alertReviewCart({
+            unavailable: true
+          });
+        }
+        return true;
+      }
+      return false;
+    };
+
+    CartHelper.anyLineItemLowStock = function(line_items, options) {
+      var isLowStock;
+      if (options == null) {
+        options = {
+          confirm: false
+        };
+      }
+      isLowStock = function(line_item) {
+        return !line_item.variation.is_virtual && line_item.qty > line_item.variation.qty_in_stock;
+      };
+      if (_.any(line_items, isLowStock)) {
+        if (options.confirm) {
+          CartHelper.confirmReviewCart();
+        } else {
+          CartHelper.alertReviewCart();
+        }
+        return true;
+      }
+      return false;
     };
 
     CartHelper.openCartModal = function(template) {
@@ -596,6 +661,30 @@
       $("div#subtotal").hide();
       $("#no-more-tables").empty();
       return $("#no-more-tables").html(CartTemplates.emptyCart());
+    };
+
+    CartHelper.alertReviewCart = function(options) {
+      if (options == null) {
+        options = {
+          unavailable: false
+        };
+      }
+      return $(CartTemplates.alertModal(CartTemplates.reviewCartItems(options))).modal().on('hidden.bs.modal', function() {
+        CartHelper.alertCartItems();
+        return $("#shopping_cart_modal").remove();
+      });
+    };
+
+    CartHelper.confirmReviewCart = function(options) {
+      if (options == null) {
+        options = {
+          unavailable: false
+        };
+      }
+      return $(CartTemplates.confirmModal(CartTemplates.reviewCartItems(options))).modal().on('hidden.bs.modal', function() {
+        CartHelper.alertCartItems();
+        return $("#shopping_cart_modal").remove();
+      });
     };
 
     CartHelper.alertCartItems = function() {
@@ -787,15 +876,26 @@
         async: true,
         data: data,
         success: function(response, status, jqXHR) {
-          var cart;
-          CartHelper.openCartModal(CartTemplates.editCartItems(response.line_items));
-          cart = new CartHandler();
-          cart.clickOnRemoveCartItem();
-          cart.onScrollCart();
-          cart.onlyNumbers();
-          cart.onChangeQuantity();
-          cart.onClickMinus();
-          return cart.onClickPlus();
+          return CartHelper.openCartModal(CartTemplates.editCartItems(response.line_items)).on('shown.bs.modal', function() {
+            var cart;
+            CartHelper.updateSubTotal();
+            cart = new CartHandler();
+            cart.clickOnRemoveCartItem();
+            cart.onScrollCart();
+            cart.onlyNumbers();
+            cart.onChangeQuantity();
+            cart.onClickMinus();
+            return cart.onClickPlus();
+          }).on('hide.bs.modal', function() {
+            return CartController.updateSummaryCart();
+          }).on('hidden.bs.modal', function() {
+            var handler;
+            CartHelper.alertCartItems();
+            $("#shopping_cart_modal").remove();
+            $("#edit-cart").removeAttr('disabled');
+            handler = new CartHandler();
+            return handler.clickResponsiveCartOnCheckout();
+          });
         }
       });
     };
@@ -889,21 +989,22 @@
         async: false,
         data: $.param(data),
         success: function(response, status, jqXHR) {
-          if (response.qty_in_stock < quantity) {
+          if (!response.is_virtual && response.qty_in_stock < quantity) {
             CartHelper.openCartModal(CartTemplates.unavailableVariation(response));
             stockStatus.available = false;
             stockStatus.maxQtyAvailable = response.qty_in_stock;
           }
         },
-        ccmplete: function(jqXHR, status) {
+        complete: function(jqXHR, status) {
           $("div.panel div.loading").toggleClass('overlay');
         }
       });
       return stockStatus;
     };
 
-    CartController.checkCartItemsInStock = function() {
-      var data, token, url;
+    CartController.checkCartItemsInStock = function(options) {
+      var data, needReviewCart, token, url;
+      needReviewCart = false;
       token = $("input[type='hidden'][name='authenticity_token']").val();
       if (!token) {
         token = $("meta[name='csrf-token']").attr('content');
@@ -912,23 +1013,22 @@
         authenticity_token: token
       };
       url = '/cart.json';
-      return $.ajax(url, {
+      $.ajax(url, {
         dataType: 'json',
         method: 'get',
-        async: true,
+        async: false,
         data: data,
         success: function(response, status, jqXHR) {
-          var isNotAvailable;
-          isNotAvailable = function(line_item) {
-            return line_item.qty > line_item.variation.qty_in_stock;
-          };
-          if (_.any(response.line_items, isNotAvailable)) {
-            return $(CartTemplates.reviewCartItems()).modal().on('hidden.bs.modal', function() {
-              return CartHelper.alertCartItems();
-            });
+          var line_items;
+          line_items = response.line_items;
+          if (CartHelper.anyLineItemNotAvailable(line_items, options)) {
+            return needReviewCart = true;
+          } else if (CartHelper.anyLineItemLowStock(line_items, options)) {
+            return needReviewCart = true;
           }
         }
       });
+      return needReviewCart;
     };
 
     CartController.updateSummaryCart = function() {
@@ -947,7 +1047,9 @@
         async: true,
         data: data,
         success: function(response, status, jqXHR) {
-          return CartHelper.alertCartItems();
+          var handler;
+          handler = new CartHandler();
+          return handler.clickOnEditCart();
         }
       });
     };
@@ -1049,8 +1151,17 @@
       });
     };
 
+    CartHandler.prototype.clickResponsiveCartOnCheckout = function() {
+      return $(document).on('click', '.close-show-cart', function(e) {
+        $(document).off('click', '.close-show-cart');
+        return CartController.showEditCart();
+      });
+    };
+
     CartHandler.prototype.clickOnEditCart = function() {
       return $('#edit-cart').on('click', function(e) {
+        $('#edit-cart').unbind('click');
+        $(this).attr('disabled', 'disabled');
         e.preventDefault();
         return CartController.showEditCart();
       });
@@ -1163,7 +1274,8 @@
           CartController.updateVariationQuantityInCart(variationId, parseInt(quantity) + 1);
           CartHelper.plusOneItemInCart(e.target);
           CartHelper.updateSubTotal();
-          return CartController.updateCartCounter();
+          CartController.updateCartCounter();
+          return $("div.panel div.loading").toggleClass('overlay');
         } else {
           CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable);
           CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable);
@@ -1178,6 +1290,14 @@
         if ($("#product-grid>tbody>tr").length === 0) {
           return CartHelper.emptyCartPage();
         }
+      });
+    };
+
+    CartHandler.prototype.onFinishCheckout = function() {
+      return $(document).on('click', ".btn-make-payment", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return console.log('Click');
       });
     };
 
@@ -1285,7 +1405,9 @@
       var cart;
       new I18n();
       cart = new CartHandler();
+      cart.clickResponsiveCartOnCheckout();
       cart.onCheckoutDocumentReady();
+      cart.onFinishCheckout();
       cart.clickOnEditCart();
     }
 

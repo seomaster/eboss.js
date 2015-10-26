@@ -60,11 +60,13 @@ class @CartHelper
     $(total_prices).find('p.old-price').text(MoneyHelper.currency(qty * old_price)) if old_price
 
   @updateSubTotal: ->
-    @calculateSubTotalFor($("#shopping-cart"))
-    @calculateSubTotalFor($("#shopping-cart-responsive"))
-  
+    @calculateSubTotalFor($("#shopping-cart~div#cart-content"))
+    @calculateSubTotalFor($("#shopping-cart-responsive~div#cart-content"))
+    # Modal cart on checkout
+    @calculateSubTotalFor($("#shopping_cart_modal").find("div.modal-body"))
+
   @calculateSubTotalFor: (cart) ->
-    cart_content = $(cart).siblings("div#cart-content")
+    cart_content = $(cart)
     if cart_content.length is 0
       cart_content = $(cart).find('#product-grid > tbody > tr')
     prices = _.map $(cart_content).find("div.total-price p.current-price"), (elem)-> $(elem).text()
@@ -74,6 +76,26 @@ class @CartHelper
     if sub_total.length is 0
       sub_total = $(cart).find('div#subtotal > div.amount p')
     $(sub_total).text MoneyHelper.currency(sum)
+
+  @anyLineItemNotAvailable: (line_items, options={confirm: false}) ->
+    isNotAvailable = (line_item) -> not line_item.variation.is_virtual and line_item.variation.qty_in_stock is 0
+    if _.any(line_items, isNotAvailable)
+      if options.confirm
+        CartHelper.confirmReviewCart({unavailable: true})
+      else
+        CartHelper.alertReviewCart({unavailable: true})
+      return true
+    false
+      
+  @anyLineItemLowStock: (line_items, options={confirm: false}) ->
+    isLowStock = (line_item) -> not line_item.variation.is_virtual and line_item.qty > line_item.variation.qty_in_stock
+    if _.any(line_items, isLowStock)
+      if options.confirm 
+        CartHelper.confirmReviewCart()
+      else
+        CartHelper.alertReviewCart()
+      return true
+    false
 
   @openCartModal: (template) ->
     $(template).modal()
@@ -101,6 +123,20 @@ class @CartHelper
     $("div#subtotal").hide()
     $("#no-more-tables").empty()
     $("#no-more-tables").html(CartTemplates.emptyCart())
+
+  @alertReviewCart: (options = {unavailable: false}) ->
+    $(CartTemplates.alertModal(CartTemplates.reviewCartItems(options))).modal()
+      .on('hidden.bs.modal', ->
+        CartHelper.alertCartItems()
+        $("#shopping_cart_modal").remove() 
+      )
+
+  @confirmReviewCart: (options= {unavailable: false}) ->
+    $(CartTemplates.confirmModal(CartTemplates.reviewCartItems(options))).modal()
+      .on('hidden.bs.modal', ->
+        CartHelper.alertCartItems()
+        $("#shopping_cart_modal").remove() 
+      )
 
   @alertCartItems: () ->
     $("#cart-items").effect('shake')
