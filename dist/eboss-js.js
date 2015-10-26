@@ -325,6 +325,7 @@
                 one: 'item',
                 others: 'itens'
               },
+              cancel: 'cancelar',
               line_items: 'Itens no meu carrinho de compras:',
               line_item_added: 'Item adicionado ao carrinho de compras!',
               finish_buy: 'finalizar compra',
@@ -336,7 +337,14 @@
               confirm_remove: 'Tem certeza de que deseja remover este item?',
               update: 'atualizar',
               unavailable: 'indisponível',
-              buy: 'adicionar ao carrinho'
+              buy: 'adicionar ao carrinho',
+              set_amount: 'Ajuste as quantidades dos produtos.',
+              save: 'Salvar carrinho',
+              warning_quantity_unavailable: 'Aviso: Quantidade indisponível em estoque',
+              product_qty_unavailable: 'A quantidade selecionada para o produto __product__ está indisponível no estoque.',
+              warning_review_cart: 'Aviso: Revise o seu carrinho de compras',
+              product_unavailable: 'Produto com estoque zerado: Seu carrinho precisou ser atualizado, pois um ou mais produtos esgotaram e foram removidos.',
+              product_stock_changed: 'Produto com estoque alterado: Seu carrinho precisou ser atualizado, pois um ou mais produtos tiveram o estoque alterado.'
             }
           }
         },
@@ -347,6 +355,7 @@
                 one: 'item',
                 others: 'items'
               },
+              cancel: 'cancel',
               line_items: 'Items in my shopping cart:',
               line_item_added: 'Item added to cart',
               finish_buy: 'proceed to checkout',
@@ -358,7 +367,14 @@
               confirm_remove: 'Are you sure you want to remove this item?',
               update: 'update',
               buy: 'add to cart',
-              unavailable: 'not available'
+              unavailable: 'not available',
+              set_amount: 'Ajuste as quantidades dos produtos.',
+              save: 'Save',
+              warning_quantity_unavailable: 'Note: that amount is not available in our stock.',
+              product_qty_unavailable: 'The desired amount for __product__ is not available at the moment.',
+              warning_review_cart: 'Note: please review your shopping cart.',
+              product_unavailable: 'Out of stock: one or more items are no longer available and have been removed. Your cart has been updated.',
+              product_stock_changed: 'Stock alert: one or more items are in low stock. Your cart has been updated to the maximum available amount.'
             }
           }
         }
@@ -389,7 +405,7 @@
 
     CartTemplates.editCartItems = function(line_items) {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>\n      </div>\n      <div class='modal-body'>\n        " + (CartTemplates.cartItems(line_items)) + "\n      </div>\n    </div>\n  </div>\n</div>";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.set_amount')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        " + (CartTemplates.cartItems(line_items)) + "\n      </div>\n    </div>\n  </div>\n</div>";
       return template;
     };
 
@@ -417,7 +433,7 @@
         if ($("div.checkout-container").length === 0) {
           checkout_button = "<a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + (i18n.t('cart.finish_buy')) + " »</a>";
         } else {
-          checkout_button = "<a href=\"/checkout\" class=\"btn btn-primary\">Salvar carrinho</a>";
+          checkout_button = "<a href=\"/checkout\" class=\"btn btn-primary\">" + (i18n.t('cart.save')) + "</a>";
         }
       }
       template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + (i18n.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        " + checkout_button + "\n      </div>\n    </div>\n  <div>\n</div>";
@@ -426,7 +442,9 @@
 
     CartTemplates.unavailableVariation = function(variation) {
       var template;
-      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>Aviso: Quantidade indisponível em estoque</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">A quantidade selecionada para o produto " + variation.product_name + " está indisponível no estoque</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_quantity_unavailable')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-9\">\n            <h5 class=\"title\">" + (i18n.t('cart.product_qty_unavailable', {
+        product: variation.product_name
+      })) + "</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
@@ -435,16 +453,16 @@
     };
 
     CartTemplates.confirmModal = function(template) {
-      return template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      " + template + "\n      <div class=\"row action-next\">\n        <div class=\"col-xs-9 col-xs-offset-3\">\n            <a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">cancelar</a>\n          </div>\n      </div>\n    </div>\n  </div>\n</div>";
+      return template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      " + template + "\n      <div class=\"row action-next\">\n        <div class=\"col-xs-9 col-xs-offset-3\">\n            <a href=\"#\" class=\"btn btn-primary\" data-dismiss=\"modal\">" + (i18n.t('cart.cancel')) + "</a>\n          </div>\n      </div>\n    </div>\n  </div>\n</div>";
     };
 
     CartTemplates.reviewCartItems = function(options) {
       var template;
-      template = "<div class='modal-header'>\n  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n  <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>\n</div>\n<div class='modal-body'>\n  <div class=\"row\">\n    <div class=\"details col-xs-9\">";
+      template = "<div class='modal-header'>\n  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n  <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_review_cart')) + "</h4>\n</div>\n<div class='modal-body'>\n  <div class=\"row\">\n    <div class=\"details col-xs-9\">";
       if (options.unavailable) {
-        template += "\"<h5 class=\"title\">Produto com estoque zerado: Seu carrinho precisou ser atualizado, pois um ou mais produtos esgotaram e foram removidos.</h5>";
+        template += "\"<h5 class=\"title\">" + (i18n.t('cart.product_unavailable')) + "</h5>";
       } else {
-        template += "\"<h5 class=\"title\">Produto com estoque alterado: Seu carrinho precisou ser atualizado, pois um ou mais produtos tiveram o estoque alterado.</h5>";
+        template += "\"<h5 class=\"title\">" + (i18n.t('cart.product_stock_changed')) + "</h5>";
       }
       template += "</div>\n</div>";
       return template;

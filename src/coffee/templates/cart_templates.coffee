@@ -45,7 +45,7 @@ class @CartTemplates
         <div class='modal-content'>
           <div class='modal-header'>
             <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-            <h4 class='modal-title' id='myModalLabel'>Ajuste as quantidades dos produtos</h4>
+            <h4 class='modal-title' id='myModalLabel'>#{i18n.t('cart.set_amount')}</h4>
           </div>
           <div class='modal-body'>
             #{CartTemplates.cartItems(line_items)}    
@@ -108,7 +108,7 @@ class @CartTemplates
       if $("div.checkout-container").length is 0
         checkout_button = """<a href="/checkout" id="checkout-button" class="btn btn-primary">#{i18n.t('cart.finish_buy')} »</a>"""
       else
-        checkout_button = """<a href="/checkout" class="btn btn-primary">Salvar carrinho</a>"""
+        checkout_button = """<a href="/checkout" class="btn btn-primary">#{i18n.t('cart.save')}</a>"""
 
     template = """
     <div class="panel panel-default">
@@ -141,12 +141,12 @@ class @CartTemplates
         <div class='modal-content'>
           <div class='modal-header'>
             <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-            <h4 class='modal-title' id='myModalLabel'>Aviso: Quantidade indisponível em estoque</h4>
+            <h4 class='modal-title' id='myModalLabel'>#{i18n.t('cart.warning_quantity_unavailable')}</h4>
           </div>
           <div class='modal-body'>
             <div class="row">
               <div class="details col-xs-9">
-                <h5 class="title">A quantidade selecionada para o produto #{variation.product_name} está indisponível no estoque</h5>
+                <h5 class="title">#{i18n.t('cart.product_qty_unavailable', {product: variation.product_name})}</h5>
               </div>
             </div>
             <div class="row action-next">
@@ -184,7 +184,7 @@ class @CartTemplates
           #{template}
           <div class="row action-next">
             <div class="col-xs-9 col-xs-offset-3">
-                <a href="#" class="btn btn-primary" data-dismiss="modal">cancelar</a>
+                <a href="#" class="btn btn-primary" data-dismiss="modal">#{i18n.t('cart.cancel')}</a>
               </div>
           </div>
         </div>
@@ -195,16 +195,16 @@ class @CartTemplates
     template = """
         <div class='modal-header'>
           <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-          <h4 class='modal-title' id='myModalLabel'>Aviso: Revise o seu carrinho de compras</h4>
+          <h4 class='modal-title' id='myModalLabel'>#{i18n.t('cart.warning_review_cart')}</h4>
         </div>
         <div class='modal-body'>
           <div class="row">
             <div class="details col-xs-9">
     """
     if options.unavailable
-      template+=""""<h5 class="title">Produto com estoque zerado: Seu carrinho precisou ser atualizado, pois um ou mais produtos esgotaram e foram removidos.</h5>"""
+      template+=""""<h5 class="title">#{i18n.t('cart.product_unavailable')}</h5>"""
     else
-      template+=""""<h5 class="title">Produto com estoque alterado: Seu carrinho precisou ser atualizado, pois um ou mais produtos tiveram o estoque alterado.</h5>"""
+      template+=""""<h5 class="title">#{i18n.t('cart.product_stock_changed')}</h5>"""
     template+="""</div>
             </div>
     """
