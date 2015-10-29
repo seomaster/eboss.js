@@ -17,8 +17,8 @@ class @Translations
           cancel: 'cancelar'
           line_items: 'Itens no meu carrinho de compras:'
           line_item_added: 'Item adicionado ao carrinho de compras!'
-          finish_buy: 'finalizar compra'
-          continue_shop: 'continuar navegando'
+          finish_buy: 'ir para o checkout'
+          continue_shop: 'voltar para a loja'
           line_items_on_cart: 'Itens no meu carrinho de compras:'
           empty_cart: 'O carrinho está vazio'
           empty: 'vazio'
@@ -27,13 +27,13 @@ class @Translations
           update: 'atualizar'
           unavailable: 'indisponível'
           buy: 'adicionar ao carrinho'
-          set_amount: 'Ajuste as quantidades dos produtos.'
+          set_amount: 'Ajuste as quantidades dos produtos'
           close: 'Fechar'
-          warning_quantity_unavailable: 'Aviso: Quantidade indisponível em estoque'
-          product_qty_unavailable: 'A quantidade selecionada para o produto __product__ está indisponível no estoque.'
-          warning_review_cart: 'Aviso: Revise o seu carrinho de compras'
-          product_unavailable: 'Produto com estoque zerado: Seu carrinho precisou ser atualizado, pois um ou mais produtos esgotaram e foram removidos.'
-          product_stock_changed: 'Produto com estoque alterado: Seu carrinho precisou ser atualizado, pois um ou mais produtos tiveram o estoque alterado.'
+          warning_quantity_unavailable: 'Aviso: Estoque limitado',
+          product_qty_unavailable: 'O produto __product__ está com estoque limitado no momento.',
+          warning_review_cart: 'Revise o seu carrinho de compras',
+          product_unavailable: 'Produto(s) removido(s): um ou mais produtos estão esgotados e foram removidos do seu carrinho.',
+          product_stock_changed: 'Aviso de estoque: um ou mais produtos estão com estoque reduzido. Atualizamos seu carrinho para a quantidade disponível.'
     'en':
       translation:
         number:
@@ -52,7 +52,7 @@ class @Translations
           line_items: 'Items in my shopping cart:'
           line_item_added: 'Item added to cart'
           finish_buy: 'proceed to checkout'
-          continue_shop: 'continue shopping'
+          continue_shop: 'go back to store'
           line_items_on_cart: 'Items in my shopping cart:'
           empty_cart: 'Your shopping cart is empty'
           empty: 'empty'
@@ -61,10 +61,10 @@ class @Translations
           update: 'update'
           buy: 'add to cart'
           unavailable: 'not available'
-          set_amount: 'Ajuste as quantidades dos produtos.'
-          close: 'Fechar'
-          warning_quantity_unavailable: 'Note: that amount is not available in our stock.'
-          product_qty_unavailable: 'The desired amount for __product__ is not available at the moment.'
-          warning_review_cart: 'Note: please review your shopping cart.'
-          product_unavailable: 'Out of stock: one or more items are no longer available and have been removed. Your cart has been updated.'
-          product_stock_changed: 'Stock alert: one or more items are in low stock. Your cart has been updated to the maximum available amount.'
+          set_amount: 'Review your items',
+          close: 'Close'
+          warning_quantity_unavailable: 'Note: Limited stock',
+          product_qty_unavailable: '__product__ is under limited stock at the moment.',
+          warning_review_cart: 'Review your shopping cart',
+          product_unavailable: 'Out of stock: one or more items are no longer available and have been removed from your cart.',
+          product_stock_changed: 'Stock alert: one or more items are in low stock. Your cart has been updated to the available amount.'
