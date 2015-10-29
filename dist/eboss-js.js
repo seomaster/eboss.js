@@ -350,6 +350,16 @@
         },
         'en': {
           translation: {
+            number: {
+              decimal: ',',
+              thousand: '.'
+            },
+            currency: {
+              symbol: '$',
+              format: '%s %v',
+              decimal: '.',
+              thousand: ','
+            },
             cart: {
               item: {
                 one: 'item',
@@ -608,7 +618,7 @@
       isNotAvailable = function(line_item) {
         return !line_item.variation.is_virtual && line_item.variation.qty_in_stock === 0;
       };
-      if (_.any(line_items, isNotAvailable)) {
+      if (!_.isEmpty(line_items) && _.any(line_items, isNotAvailable)) {
         if (options.confirm) {
           CartHelper.confirmReviewCart({
             unavailable: true
@@ -633,7 +643,7 @@
       isLowStock = function(line_item) {
         return !line_item.variation.is_virtual && line_item.qty > line_item.variation.qty_in_stock;
       };
-      if (_.any(line_items, isLowStock)) {
+      if (!_.isEmpty(line_items) && _.any(line_items, isLowStock)) {
         if (options.confirm) {
           CartHelper.confirmReviewCart();
         } else {
@@ -733,7 +743,7 @@
     };
 
     MoneyHelper.value = function(currency) {
-      return accounting.unformat(currency, ',');
+      return accounting.unformat(currency, i18n.t('currency.decimal'));
     };
 
     return MoneyHelper;

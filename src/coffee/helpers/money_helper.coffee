@@ -4,4 +4,4 @@ class @MoneyHelper
     accounting.formatMoney(value)
 
   @value: (currency) ->
-    accounting.unformat(currency, ',')
+    accounting.unformat(currency, i18n.t('currency.decimal'))

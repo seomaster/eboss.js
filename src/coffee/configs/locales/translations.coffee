@@ -36,6 +36,14 @@ class @Translations
           product_stock_changed: 'Produto com estoque alterado: Seu carrinho precisou ser atualizado, pois um ou mais produtos tiveram o estoque alterado.'
     'en':
       translation:
+        number:
+          decimal: ','
+          thousand: '.'
+        currency:
+          symbol: '$'
+          format: '%s %v'
+          decimal: '.'
+          thousand: ','
         cart:
           item:
             one: 'item'

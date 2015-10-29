@@ -79,7 +79,7 @@ class @CartHelper
 
   @anyLineItemNotAvailable: (line_items, options={confirm: false}) ->
     isNotAvailable = (line_item) -> not line_item.variation.is_virtual and line_item.variation.qty_in_stock is 0
-    if _.any(line_items, isNotAvailable)
+    if not _.isEmpty(line_items) and _.any(line_items, isNotAvailable)
       if options.confirm
         CartHelper.confirmReviewCart({unavailable: true})
       else
@@ -89,7 +89,7 @@ class @CartHelper
       
   @anyLineItemLowStock: (line_items, options={confirm: false}) ->
     isLowStock = (line_item) -> not line_item.variation.is_virtual and line_item.qty > line_item.variation.qty_in_stock
-    if _.any(line_items, isLowStock)
+    if not _.isEmpty(line_items) and _.any(line_items, isLowStock)
       if options.confirm 
         CartHelper.confirmReviewCart()
       else
