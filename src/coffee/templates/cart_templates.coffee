@@ -135,6 +135,9 @@ class @CartTemplates
     template
 
   @unavailableVariation: (variation) ->
+    custom_message = $('#unavailable_product_message').html()
+    if !custom_message
+      custom_message = ""
     template = """
     <div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>
       <div class='modal-dialog' role='document'>
@@ -147,6 +150,7 @@ class @CartTemplates
             <div class="row">
               <div class="details col-xs-12">
                 <h5 class="title">#{i18n.t('cart.product_qty_unavailable', {product: variation.product_name})}</h5>
+                #{custom_message}
               </div>
             </div>
             <div class="row action-next">

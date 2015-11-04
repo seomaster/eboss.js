@@ -450,10 +450,15 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
     };
 
     CartTemplates.unavailableVariation = function(variation) {
-      var template;
+      var custom_message, template;
+      custom_message = $('#unavailable_product_message').html();
+      if (!custom_message) {
+        alert(custom_message);
+        custom_message = "";
+      }
       template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_quantity_unavailable')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-12\">\n            <h5 class=\"title\">" + (i18n.t('cart.product_qty_unavailable', {
         product: variation.product_name
-      })) + "</h5>\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
+      })) + "</h5>\n            " + custom_message + "\n          </div>\n        </div>\n        <div class=\"row action-next\">\n          <div class=\"col-xs-9\">\n            <div class=\"keep-shopping\"><a href=\"/\" data-dismiss=\"modal\">« " + (i18n.t('cart.continue_shop')) + "</a></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>  ";
       return template;
     };
 
