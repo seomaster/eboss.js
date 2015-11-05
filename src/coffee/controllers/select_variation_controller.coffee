@@ -8,8 +8,10 @@ class @SelectVariationController
 
   updateRegularPrice: (variations) ->
     if variations.length == 1
-      SelectVariationHelper.updatePrice("div[data-role='regular-price']",
-        MoneyHelper.currency(variations[0].regular_price))
+      if variations[0].regular_price > variations[0].sale_price
+        SelectVariationHelper.updatePrice("div[data-role='regular-price']", MoneyHelper.currency(variations[0].regular_price))
+      else
+        SelectVariationHelper.updatePrice("div[data-role='regular-price']", '')
 
   updateHistoryState: (element) ->
     SelectVariationHelper

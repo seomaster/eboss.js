@@ -19,7 +19,6 @@ class @CartTemplates
               <div class="details col-xs-9">
                 <h5 class="title">#{variation.product_name}</h5>
                 <div class="price-now">#{MoneyHelper.currency(variation.sale_price)}</div>
-                <div class="price-old">#{MoneyHelper.currency(variation.regular_price)}</div>
                 <ul class="attributes">
                   #{attributes}
                 </ul>
@@ -89,15 +88,13 @@ class @CartTemplates
               </div>
               <div class='price'>
                 <div class='amount'>
-                  <p class='current-price'><span class="x">x </span>#{MoneyHelper.currency(variation.sale_price)}</p>
-                  <p class='old-price'>#{MoneyHelper.currency(variation.regular_price)}</p>
+                  <p class='current-price'><span class="x">x </span>#{MoneyHelper.currency(variation.sale_price)}</p>                  
                 </div>
               </div>
             </div>
             <a href="javascript:void(0)" class="item_update_qty"><i class="fa fa-refresh"></i> #{i18n.t('cart.update')}</a>
             <div class='total-price'>
               <p class='current-price'>#{MoneyHelper.currency(item.qty * variation.sale_price)}</p>
-              <p class='old-price'>#{MoneyHelper.currency(item.qty * variation.regular_price)}</p>
             </div>
           </div>
         </div>
