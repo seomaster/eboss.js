@@ -43,7 +43,10 @@ class @SelectVariationController
       if variations[0].is_virtual
         $("#buy-button").text($.t('cart.buy')).attr('disabled', false)
       else 
-        if variations[0].qty_in_stock == 0
+        if variations[0].qty_in_stock <= 0
           $("#buy-button").text($.t('cart.unavailable')).attr('disabled', true)
+          $('.price-box .price-now, .price-box .price-old').html('')
+          $('.backorder-info').show()
         else
           $("#buy-button").text($.t('cart.buy')).attr('disabled', false)
+          $('.backorder-info').hide()

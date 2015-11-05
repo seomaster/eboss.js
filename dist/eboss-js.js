@@ -453,7 +453,6 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
       var custom_message, template;
       custom_message = $('#unavailable_product_message').html();
       if (!custom_message) {
-        alert(custom_message);
         custom_message = "";
       }
       template = "<div class='modal fade' id='shopping_cart_modal' tabindex='-1' role='dialog'>\n  <div class='modal-dialog' role='document'>\n    <div class='modal-content'>\n      <div class='modal-header'>\n        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>\n        <h4 class='modal-title' id='myModalLabel'>" + (i18n.t('cart.warning_quantity_unavailable')) + "</h4>\n      </div>\n      <div class='modal-body'>\n        <div class=\"row\">\n          <div class=\"details col-xs-12\">\n            <h5 class=\"title\">" + (i18n.t('cart.product_qty_unavailable', {
@@ -1162,10 +1161,13 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
         if (variations[0].is_virtual) {
           return $("#buy-button").text($.t('cart.buy')).attr('disabled', false);
         } else {
-          if (variations[0].qty_in_stock === 0) {
-            return $("#buy-button").text($.t('cart.unavailable')).attr('disabled', true);
+          if (variations[0].qty_in_stock <= 0) {
+            $("#buy-button").text($.t('cart.unavailable')).attr('disabled', true);
+            $('.price-box .price-now, .price-box .price-old').html('');
+            return $('.backorder-info').show();
           } else {
-            return $("#buy-button").text($.t('cart.buy')).attr('disabled', false);
+            $("#buy-button").text($.t('cart.buy')).attr('disabled', false);
+            return $('.backorder-info').hide();
           }
         }
       }
