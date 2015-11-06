@@ -92,7 +92,6 @@ class @CartTemplates
                 </div>
               </div>
             </div>
-            <a href="javascript:void(0)" class="item_update_qty"><i class="fa fa-refresh"></i> #{i18n.t('cart.update')}</a>
             <div class='total-price'>
               <p class='current-price'>#{MoneyHelper.currency(item.qty * variation.sale_price)}</p>
             </div>
