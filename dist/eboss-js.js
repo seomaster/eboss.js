@@ -1168,10 +1168,12 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
           if (variations[0].qty_in_stock <= 0) {
             $("#buy-button").text($.t('cart.unavailable')).attr('disabled', true);
             $('.price-box .price-now, .price-box .price-old').html('');
+            $('.price-box .price-info').hide();
             return $('.backorder-info').show();
           } else {
             $("#buy-button").text($.t('cart.buy')).attr('disabled', false);
-            return $('.backorder-info').hide();
+            $('.backorder-info').hide();
+            return $('.price-box .price-info').show();
           }
         }
       }
