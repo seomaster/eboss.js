@@ -26,7 +26,16 @@ class @CartHandler
     $('#buy-button').on 'click', (e) ->
       e.preventDefault()
       e.stopPropagation()
-      CartController.addToCart()
+      variationId = $("form#add_to_cart").find("input[type='hidden'][name='variation_selected']").val()
+      quantity = parseInt $("#variation_qty_#{variationId}").val()
+      stock = CartController.checkVariationAvailableInStock(variationId, quantity + 1)
+      if stock.available
+        CartController.addToCart()
+      else
+        CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable)
+        CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable)
+        CartHelper.updateSubTotal()
+        CartController.updateCartCounter()
 
   clickOnRemoveCartItem: ->
     $("span.remove-item a").on 'click', (e) ->
