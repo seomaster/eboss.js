@@ -60,8 +60,9 @@ class @CartHelper
     $(total_prices).find('p.old-price').text(MoneyHelper.currency(qty * old_price)) if old_price
 
   @updateSubTotal: ->
-    @calculateSubTotalFor($("#shopping-cart~div#cart-content"))
-    @calculateSubTotalFor($("#shopping-cart-responsive~div#cart-content"))
+    @calculateSubTotalFor($("#header-cart .cart-display"))
+    @calculateSubTotalFor($("#responsive-header-cart .cart-display"))
+    @calculateSubTotalFor($("#fixed-header-cart .cart-display"))
     # Modal cart on checkout
     @calculateSubTotalFor($("#shopping_cart_modal").find("div.modal-body"))
 
@@ -102,8 +103,9 @@ class @CartHelper
       
   @showCart: (template) ->
     $("div#cart-content").remove()
-    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart"))
-    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart-responsive"))
+    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("#header-cart .cart-display"));
+    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("#responsive-header-cart .cart-display"));
+    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("#fixed-header-cart .cart-display"));
     $("div#cart-content").html(template)
     $('div#cart-content').click (e) -> e.stopPropagation()
 
