@@ -587,29 +587,33 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
     };
 
     CartHelper.updateSubTotal = function() {
-      this.calculateSubTotalFor($("#header-cart .cart-display"));
-      this.calculateSubTotalFor($("#responsive-header-cart .cart-display"));
-      this.calculateSubTotalFor($("#fixed-header-cart .cart-display"));
+      this.calculateSubTotalFor($(".cart-display"));
       return this.calculateSubTotalFor($("#shopping_cart_modal").find("div.modal-body"));
     };
 
-    CartHelper.calculateSubTotalFor = function(cart) {
-      var cart_content, prices, sub_total, sum;
-      cart_content = $(cart);
+    CartHelper.calculateSubTotalFor = function(carts) {
+      var cart, cart_content, i, len, prices, ref, results, sub_total, sum;
+      cart_content = $(carts);
       if (cart_content.length === 0) {
-        cart_content = $(cart).find('#product-grid > tbody > tr');
+        cart_content = $(carts).find('#product-grid > tbody > tr');
       }
-      prices = _.map($(cart_content).find("div.total-price p.current-price"), function(elem) {
-        return $(elem).text();
-      });
-      sum = _.reduce(prices, (function(memo, num) {
-        return memo + MoneyHelper.value(num);
-      }), 0);
-      sub_total = $(cart_content).find("div.subtotal p");
-      if (sub_total.length === 0) {
-        sub_total = $(cart).find('div#subtotal > div.amount p');
+      ref = $(cart_content);
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        cart = ref[i];
+        prices = _.map($(cart).siblings(".cart-container").find("div.total-price p.current-price"), function(elem) {
+          return $(elem).text();
+        });
+        sum = _.reduce(prices, (function(memo, num) {
+          return memo + MoneyHelper.value(num);
+        }), 0);
+        sub_total = $(cart).siblings().find("div.subtotal p");
+        if (sub_total.length === 0) {
+          sub_total = $(cart).find('div#subtotal > div.amount p');
+        }
+        results.push($(sub_total).text(MoneyHelper.currency(sum)));
       }
-      return $(sub_total).text(MoneyHelper.currency(sum));
+      return results;
     };
 
     CartHelper.anyLineItemNotAvailable = function(line_items, options) {
@@ -664,9 +668,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
 
     CartHelper.showCart = function(template) {
       $("div#cart-content").remove();
-      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("#header-cart .cart-display"));
-      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("#responsive-header-cart .cart-display"));
-      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("#fixed-header-cart .cart-display"));
+      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($(".cart-display"));
       $("div#cart-content").html(template);
       return $('div#cart-content').click(function(e) {
         return e.stopPropagation();
