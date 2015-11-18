@@ -16,6 +16,20 @@ class @CartController
       error: (jqXHR, textStatus, errorThrow) ->
         console.log errorThrow
 
+  @getCart: ->
+    form = $("form[id='add_to_cart']")
+    data = $(form).serialize()
+    url = '/cart.json'
+    $.ajax url,
+      dataType: 'json'
+      method: 'get'
+      async: false
+      data: data
+      success: (response, status, jqXHR) ->
+        return response
+      error: (jqXHR, textStatus, errorThrow) ->
+        console.log errorThrow
+
   @showCart: ->
     form = $("form[id='add_to_cart']")
     data = $(form).serialize()

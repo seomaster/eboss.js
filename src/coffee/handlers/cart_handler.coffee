@@ -27,7 +27,15 @@ class @CartHandler
       e.preventDefault()
       e.stopPropagation()
       variationId = $("form#add_to_cart").find("input[type='hidden'][name='variation_selected']").val()
-      quantity = parseInt $("#variation_qty_#{variationId}").val()
+      if $("#cart_content").length is 0
+        cart = CartController.getCart().responseJSON
+        if cart.number_of_items is 0
+          quantity = 0
+        else
+          line_item = _.filter(cart.line_items, (item) -> item.variation.id is parseInt(variationId) )[0]
+          quantity = line_item.qty
+      else
+        quantity = parseInt $("#variation_qty_#{variationId}").val()
       stock = CartController.checkVariationAvailableInStock(variationId, quantity + 1)
       if stock.available
         CartController.addToCart()
