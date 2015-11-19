@@ -82,7 +82,7 @@ class @CartTemplates
             <div class='quantity-price'>                    
               <div class='how-many'>
                 <input type='button' class='less' value='-'>
-                <input type="text"   class="qty" id="variation_qty_#{variation.id}" name="name" value="#{item.qty}" maxlength="2" />
+                <input type="text"   class="qty" id="variation_qty_#{variation.id}" name="name" value="#{item.qty}" maxlength="3" />
                 <input type="button" class="more" value="+" >
                 <input type="hidden" name="variation_id" value="#{variation.id}" />
               </div>
