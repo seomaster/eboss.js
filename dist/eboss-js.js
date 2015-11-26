@@ -587,28 +587,35 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
     };
 
     CartHelper.updateSubTotal = function() {
-      this.calculateSubTotalFor($("#shopping-cart~div#cart-content"));
-      this.calculateSubTotalFor($("#shopping-cart-responsive~div#cart-content"));
-      return this.calculateSubTotalFor($("#shopping_cart_modal").find("div.modal-body"));
+      this.calculateSubTotalFor($(".cart-display").siblings('#cart-content'));
+      if ($("#checkout-page #shopping_cart_modal").length > 0) {
+        return this.calculateSubTotalFor($("#checkout-page #shopping_cart_modal").find("div.modal-body"));
+      }
     };
 
-    CartHelper.calculateSubTotalFor = function(cart) {
-      var cart_content, prices, sub_total, sum;
-      cart_content = $(cart);
+    CartHelper.calculateSubTotalFor = function(carts) {
+      var cart, cart_content, i, len, prices, ref, results, sub_total, sum;
+      cart_content = $(carts);
       if (cart_content.length === 0) {
-        cart_content = $(cart).find('#product-grid > tbody > tr');
+        cart_content = $(carts).find('#product-grid > tbody > tr');
       }
-      prices = _.map($(cart_content).find("div.total-price p.current-price"), function(elem) {
-        return $(elem).text();
-      });
-      sum = _.reduce(prices, (function(memo, num) {
-        return memo + MoneyHelper.value(num);
-      }), 0);
-      sub_total = $(cart_content).find("div.subtotal p");
-      if (sub_total.length === 0) {
-        sub_total = $(cart).find('div#subtotal > div.amount p');
+      ref = $(cart_content);
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        cart = ref[i];
+        prices = _.map($(cart).find(".item div.total-price p.current-price"), function(elem) {
+          return $(elem).text();
+        });
+        sum = _.reduce(prices, (function(memo, num) {
+          return memo + MoneyHelper.value(num);
+        }), 0);
+        sub_total = $(cart).parents().find("div.subtotal p");
+        if (sub_total.length === 0) {
+          sub_total = $(cart).find('div#subtotal > div.amount p');
+        }
+        results.push($(sub_total).text(MoneyHelper.currency(sum)));
       }
-      return $(sub_total).text(MoneyHelper.currency(sum));
+      return results;
     };
 
     CartHelper.anyLineItemNotAvailable = function(line_items, options) {
@@ -663,8 +670,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
 
     CartHelper.showCart = function(template) {
       $("div#cart-content").remove();
-      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart"));
-      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart-responsive"));
+      $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($(".cart-display"));
       $("div#cart-content").html(template);
       return $('div#cart-content').click(function(e) {
         return e.stopPropagation();
@@ -1209,11 +1215,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
     function CartHandler() {}
 
     CartHandler.prototype.clickOnCart = function() {
-      $("#shopping-cart-responsive").children().on('click', function(e) {
-        e.preventDefault();
-        return CartController.showCart();
-      });
-      return $('#shopping-cart').children().on('click', function(e) {
+      return $('.cart-display').children().on('click', function(e) {
         e.preventDefault();
         return CartController.showCart();
       });
@@ -1251,7 +1253,11 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
             line_item = _.filter(cart.line_items, function(item) {
               return item.variation.id === parseInt(variationId);
             })[0];
-            quantity = line_item.qty;
+            if (line_item) {
+              quantity = line_item.qty;
+            } else {
+              quantity = 0;
+            }
           }
         } else {
           quantity = parseInt($("#variation_qty_" + variationId).val());

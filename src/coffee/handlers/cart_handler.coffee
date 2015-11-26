@@ -2,10 +2,7 @@ class @CartHandler
   constructor: ->
     
   clickOnCart: ->
-    $("#shopping-cart-responsive").children().on 'click', (e)->
-      e.preventDefault()
-      CartController.showCart()
-    $('#shopping-cart').children().on 'click', (e) ->
+    $('.cart-display').children().on 'click', (e)->
       e.preventDefault()
       CartController.showCart()
   
@@ -23,27 +20,30 @@ class @CartHandler
       CartController.showEditCart()
 
   clickOnAddToCart: ->
-    $('#buy-button').on 'click', (e) ->
-      e.preventDefault()
-      e.stopPropagation()
-      variationId = $("form#add_to_cart").find("input[type='hidden'][name='variation_selected']").val()
-      if $("#cart_content").length is 0
-        cart = CartController.getCart().responseJSON
-        if cart.number_of_items is 0
-          quantity = 0
-        else
-          line_item = _.filter(cart.line_items, (item) -> item.variation.id is parseInt(variationId) )[0]
-          quantity = line_item.qty
-      else
-        quantity = parseInt $("#variation_qty_#{variationId}").val()
-      stock = CartController.checkVariationAvailableInStock(variationId, quantity + 1)
-      if stock.available
-        CartController.addToCart()
-      else
-        CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable)
-        CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable)
-        CartHelper.updateSubTotal()
-        CartController.updateCartCounter()
+   $('#buy-button').on 'click', (e) ->
+     e.preventDefault()
+     e.stopPropagation()
+     variationId = $("form#add_to_cart").find("input[type='hidden'][name='variation_selected']").val()
+     if $("#cart_content").length is 0
+       cart = CartController.getCart().responseJSON
+       if cart.number_of_items is 0
+         quantity = 0
+       else
+         line_item = _.filter(cart.line_items, (item) -> item.variation.id is parseInt(variationId) )[0]
+         if line_item
+           quantity = line_item.qty
+         else
+           quantity = 0
+     else
+       quantity = parseInt $("#variation_qty_#{variationId}").val()
+     stock = CartController.checkVariationAvailableInStock(variationId, quantity + 1)
+     if stock.available
+       CartController.addToCart()
+     else
+       CartController.updateVariationQuantityInCart(variationId, stock.maxQtyAvailable)
+       CartHelper.updatePriceByQuantity(e.target, stock.maxQtyAvailable)
+       CartHelper.updateSubTotal()
+       CartController.updateCartCounter()
 
   clickOnRemoveCartItem: ->
     $("span.remove-item a").on 'click', (e) ->

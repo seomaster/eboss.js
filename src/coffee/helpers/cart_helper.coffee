@@ -60,22 +60,23 @@ class @CartHelper
     $(total_prices).find('p.old-price').text(MoneyHelper.currency(qty * old_price)) if old_price
 
   @updateSubTotal: ->
-    @calculateSubTotalFor($("#shopping-cart~div#cart-content"))
-    @calculateSubTotalFor($("#shopping-cart-responsive~div#cart-content"))
+    @calculateSubTotalFor($(".cart-display").siblings('#cart-content'))
     # Modal cart on checkout
-    @calculateSubTotalFor($("#shopping_cart_modal").find("div.modal-body"))
+    if $("#checkout-page #shopping_cart_modal").length > 0
+      @calculateSubTotalFor($("#checkout-page #shopping_cart_modal").find("div.modal-body"))
 
-  @calculateSubTotalFor: (cart) ->
-    cart_content = $(cart)
+  @calculateSubTotalFor: (carts) ->
+    cart_content = $(carts)
     if cart_content.length is 0
-      cart_content = $(cart).find('#product-grid > tbody > tr')
-    prices = _.map $(cart_content).find("div.total-price p.current-price"), (elem)-> $(elem).text()
-    sum = _.reduce prices, ((memo, num)->  memo + MoneyHelper.value(num) ), 0
-    
-    sub_total = $(cart_content).find("div.subtotal p");
-    if sub_total.length is 0
-      sub_total = $(cart).find('div#subtotal > div.amount p')
-    $(sub_total).text MoneyHelper.currency(sum)
+      cart_content = $(carts).find('#product-grid > tbody > tr')
+    for cart in $(cart_content)      
+      prices = _.map $(cart).find(".item div.total-price p.current-price"), (elem)-> $(elem).text()
+      sum = _.reduce prices, ((memo, num)->  memo + MoneyHelper.value(num) ), 0
+      
+      sub_total = $(cart).parents().find("div.subtotal p");
+      if sub_total.length is 0
+        sub_total = $(cart).find('div#subtotal > div.amount p')
+      $(sub_total).text MoneyHelper.currency(sum)
 
   @anyLineItemNotAvailable: (line_items, options={confirm: false}) ->
     isNotAvailable = (line_item) -> not line_item.variation.is_virtual and line_item.variation.qty_in_stock is 0
@@ -102,8 +103,7 @@ class @CartHelper
       
   @showCart: (template) ->
     $("div#cart-content").remove()
-    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart"))
-    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($("div#shopping-cart-responsive"))
+    $("<div id='cart-content' class='cart-container dropdown-menu pull-right' aria-labelledby='shopping-cart'>").insertAfter($(".cart-display"))
     $("div#cart-content").html(template)
     $('div#cart-content').click (e) -> e.stopPropagation()
 
