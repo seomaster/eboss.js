@@ -609,9 +609,9 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
         sum = _.reduce(prices, (function(memo, num) {
           return memo + MoneyHelper.value(num);
         }), 0);
-        sub_total = $(cart).parents().find("div.subtotal p");
+        sub_total = $(cart).find("div.subtotal p");
         if (sub_total.length === 0) {
-          sub_total = $(cart).find('div#subtotal > div.amount p');
+          sub_total = $(cart).find('div.subtotal > div.amount p');
         }
         results.push($(sub_total).text(MoneyHelper.currency(sum)));
       }

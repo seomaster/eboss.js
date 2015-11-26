@@ -73,9 +73,9 @@ class @CartHelper
       prices = _.map $(cart).find(".item div.total-price p.current-price"), (elem)-> $(elem).text()
       sum = _.reduce prices, ((memo, num)->  memo + MoneyHelper.value(num) ), 0
       
-      sub_total = $(cart).parents().find("div.subtotal p");
+      sub_total = $(cart).find("div.subtotal p");
       if sub_total.length is 0
-        sub_total = $(cart).find('div#subtotal > div.amount p')
+        sub_total = $(cart).find('div.subtotal > div.amount p')
       $(sub_total).text MoneyHelper.currency(sum)
 
   @anyLineItemNotAvailable: (line_items, options={confirm: false}) ->
