@@ -626,7 +626,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
         };
       }
       isNotAvailable = function(line_item) {
-        return !line_item.variation.is_virtual && line_item.variation.qty_in_stock === 0;
+        return !line_item.variation.is_visible || (!line_item.variation.is_virtual && line_item.variation.qty_in_stock === 0);
       };
       if (!_.isEmpty(line_items) && _.any(line_items, isNotAvailable)) {
         if (options.confirm) {
@@ -651,7 +651,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
         };
       }
       isLowStock = function(line_item) {
-        return !line_item.variation.is_virtual && line_item.qty > line_item.variation.qty_in_stock;
+        return !line_item.variation.is_visible || (!line_item.variation.is_virtual && line_item.qty > line_item.variation.qty_in_stock);
       };
       if (!_.isEmpty(line_items) && _.any(line_items, isLowStock)) {
         if (options.confirm) {
