@@ -19,6 +19,7 @@ class @Translations
           line_item_added: 'Item adicionado ao carrinho de compras!'
           finish_buy: 'ir para o checkout'
           continue_shop: 'voltar para a loja'
+          return_home: 'voltar para página inicial da loja'
           line_items_on_cart: 'Itens no meu carrinho de compras:'
           empty_cart: 'O carrinho está vazio'
           empty: 'vazio'
@@ -29,6 +30,7 @@ class @Translations
           buy: 'adicionar ao carrinho'
           set_amount: 'Ajuste as quantidades dos produtos'
           close: 'Fechar'
+          continue: 'Continuar'
           warning_quantity_unavailable: 'Aviso: Estoque limitado',
           product_qty_unavailable: 'O produto __product__ está com estoque limitado no momento.',
           warning_review_cart: 'Revise o seu carrinho de compras',
@@ -53,6 +55,7 @@ class @Translations
           line_item_added: 'Item added to cart'
           finish_buy: 'proceed to checkout'
           continue_shop: 'go back to store'
+          return_home: 'return to store front'
           line_items_on_cart: 'Items in my shopping cart:'
           empty_cart: 'Your shopping cart is empty'
           empty: 'empty'
@@ -63,6 +66,7 @@ class @Translations
           unavailable: 'not available'
           set_amount: 'Review your items',
           close: 'Close'
+          continue: 'Continue'
           warning_quantity_unavailable: 'Note: Limited stock',
           product_qty_unavailable: '__product__ is under limited stock at the moment.',
           warning_review_cart: 'Review your shopping cart',

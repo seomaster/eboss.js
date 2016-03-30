@@ -329,6 +329,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
               line_item_added: 'Item adicionado ao carrinho de compras!',
               finish_buy: 'ir para o checkout',
               continue_shop: 'voltar para a loja',
+              return_home: 'voltar para página inicial da loja',
               line_items_on_cart: 'Itens no meu carrinho de compras:',
               empty_cart: 'O carrinho está vazio',
               empty: 'vazio',
@@ -339,6 +340,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
               buy: 'adicionar ao carrinho',
               set_amount: 'Ajuste as quantidades dos produtos',
               close: 'Fechar',
+              "continue": 'Continuar',
               warning_quantity_unavailable: 'Aviso: Estoque limitado',
               product_qty_unavailable: 'O produto __product__ está com estoque limitado no momento.',
               warning_review_cart: 'Revise o seu carrinho de compras',
@@ -369,6 +371,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
               line_item_added: 'Item added to cart',
               finish_buy: 'proceed to checkout',
               continue_shop: 'go back to store',
+              return_home: 'return to store front',
               line_items_on_cart: 'Items in my shopping cart:',
               empty_cart: 'Your shopping cart is empty',
               empty: 'empty',
@@ -379,6 +382,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
               unavailable: 'not available',
               set_amount: 'Review your items',
               close: 'Close',
+              "continue": 'Continue',
               warning_quantity_unavailable: 'Note: Limited stock',
               product_qty_unavailable: '__product__ is under limited stock at the moment.',
               warning_review_cart: 'Review your shopping cart',
@@ -419,7 +423,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
     };
 
     CartTemplates.cartItems = function(line_items) {
-      var attributes, checkout_button, i, item, j, len, len1, option, ref, template, variation, variation_tmp;
+      var attributes, checkout_button, checkout_return_home_btn, i, item, j, len, len1, option, ref, template, variation, variation_tmp;
       variation_tmp = '';
       if (line_items.length === 0) {
         variation_tmp = this.emptyCart();
@@ -441,11 +445,13 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
       } else {
         if ($("div.checkout-container").length === 0) {
           checkout_button = "<a href=\"/checkout\" id=\"checkout-button\" class=\"btn btn-primary\">" + (i18n.t('cart.finish_buy')) + " »</a>";
+          checkout_return_home_btn = "";
         } else {
-          checkout_button = "<a href=\"/checkout\" class=\"btn btn-primary\">" + (i18n.t('cart.close')) + "</a>";
+          checkout_button = "<a href=\"/checkout\" class=\"btn btn-primary\">" + (i18n.t('cart.continue')) + "</a>";
+          checkout_return_home_btn = "<div class=\"row\"><div id=\"return-home\"><div class=\"link\"><a href=\"/\">« " + (i18n.t('cart.return_home')) + "</a></div></div></div>";
         }
       }
-      template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + (i18n.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        " + checkout_button + "\n      </div>\n    </div>\n  <div>\n</div>";
+      template = "<div class=\"panel panel-default\">\n  <div class=\"loading\"></div>\n  <div class=\"panel-heading\">\n    <h4 class=\"panel-title\">" + (i18n.t('cart.line_items')) + " </h4>\n  </div>\n  <div class=\"panel-body\">\n    " + variation_tmp + "\n  </div>\n  <div class=\"panel-footer\">\n    <div class=\"row\">\n      <div class=\"col-xs-5 subtotal\">\n        <h5>Subtotal</h5>\n        <p>R$ 0,00</p>\n      </div>\n      <div class=\"col-xs-7 action-checkout text-right\">\n        " + checkout_button + "\n      </div>\n    </div>\n  <div>\n</div>\n" + checkout_return_home_btn;
       return template;
     };
 

@@ -103,8 +103,10 @@ class @CartTemplates
     else
       if $("div.checkout-container").length is 0
         checkout_button = """<a href="/checkout" id="checkout-button" class="btn btn-primary">#{i18n.t('cart.finish_buy')} »</a>"""
+        checkout_return_home_btn = ""
       else
-        checkout_button = """<a href="/checkout" class="btn btn-primary">#{i18n.t('cart.close')}</a>"""
+        checkout_button = """<a href="/checkout" class="btn btn-primary">#{i18n.t('cart.continue')}</a>"""
+        checkout_return_home_btn = """<div class="row"><div id="return-home"><div class="link"><a href="/">« #{i18n.t('cart.return_home')}</a></div></div></div>"""
 
     template = """
     <div class="panel panel-default">
@@ -127,6 +129,7 @@ class @CartTemplates
         </div>
       <div>
     </div>
+    #{checkout_return_home_btn}
     """
     template
 
