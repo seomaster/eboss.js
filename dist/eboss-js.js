@@ -327,7 +327,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
               cancel: 'cancelar',
               line_items: 'Itens no meu carrinho de compras:',
               line_item_added: 'Item adicionado ao carrinho de compras!',
-              finish_buy: 'ir para o checkout',
+              finish_buy: 'finalizar compra',
               continue_shop: 'voltar para a loja',
               return_home: 'voltar para página inicial da loja',
               line_items_on_cart: 'Itens no meu carrinho de compras:',
