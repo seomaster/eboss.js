@@ -6,7 +6,7 @@ class @SelectVariationHandler
   onClickVariation: ->
     $("input[data-role='variation']").on 'click keyup', (event) ->
       event.stopPropagation()
-      form = $(@).closest('form')
+      form = $(@).closest('form[id="select_variations"]')
       action = "#{$(form).attr('action')}.json"
       data = $(form).serialize()
       request =

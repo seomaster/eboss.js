@@ -19,12 +19,7 @@ class @SelectVariationController
 
   selectOptionsOnLoad: ->
     parameters = SelectVariationHelper.getURLParameters()
-    if _.isEmpty(parameters)
-      first_options = $("ul.feature-options").find("input[data-role='variation']:first")
-      for option in first_options
-        $(option).attr 'checked', true
-        $(option).click()
-    else
+    if not _.isEmpty(parameters)
       options = $("input[data-role='variation']")
       options.each (index, option) ->
         name = $(option).attr 'name'

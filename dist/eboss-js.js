@@ -1156,18 +1156,9 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
     };
 
     SelectVariationController.prototype.selectOptionsOnLoad = function() {
-      var first_options, i, len, option, options, parameters, results;
+      var options, parameters;
       parameters = SelectVariationHelper.getURLParameters();
-      if (_.isEmpty(parameters)) {
-        first_options = $("ul.feature-options").find("input[data-role='variation']:first");
-        results = [];
-        for (i = 0, len = first_options.length; i < len; i++) {
-          option = first_options[i];
-          $(option).attr('checked', true);
-          results.push($(option).click());
-        }
-        return results;
-      } else {
+      if (!_.isEmpty(parameters)) {
         options = $("input[data-role='variation']");
         return options.each(function(index, option) {
           var name, value;
@@ -1435,7 +1426,7 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
       return $("input[data-role='variation']").on('click keyup', function(event) {
         var action, data, form, request;
         event.stopPropagation();
-        form = $(this).closest('form');
+        form = $(this).closest('form[id="select_variations"]');
         action = ($(form).attr('action')) + ".json";
         data = $(form).serialize();
         request = {
