@@ -1184,6 +1184,9 @@ return b.unshift(a),ba.apply(null,b)};aa("sprintf",function(a,b,c){return c.spri
 
     SelectVariationController.prototype.toggleBuyButton = function(variations) {
       if (variations.length === 1) {
+        if ($("#buy-button").parent('div[data-toggle="popover"]').length) {
+          $("#buy-button").unwrap();
+        }
         if (variations[0].is_virtual) {
           return $("#buy-button").text($.t('cart.buy')).attr('disabled', false);
         } else {
